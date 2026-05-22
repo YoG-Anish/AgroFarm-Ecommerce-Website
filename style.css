@@ -1,0 +1,303 @@
+/*
+Theme Name: Agrofarm
+Theme URI: https://broccoli.agrofarm.com/
+Description: Agrofarm theme for Broccoli
+Author: Anish Maka
+Author URI: https://broccoli.agrofarm.com/
+Version: 1.0
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 95%;
+    max-width: 1320px;
+    margin: auto;
+}
+
+/* =========================
+TOP BAR
+========================= */
+
+.broccoli-topbar {
+    background: #f3f3f3;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.broccoli-topbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.topbar-left,
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+.topbar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #222;
+    font-size: 14px;
+}
+
+.topbar-item a {
+    color: #222;
+    text-decoration: none;
+}
+
+.phone-content {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.phone-content small {
+    font-size: 10px;
+    color: #777;
+    text-transform: uppercase;
+}
+
+.phone-content a {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.language-switcher {
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.social-icons {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.social-icons a {
+    text-decoration: none;
+    color: #111;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* =========================
+MAIN HEADER
+========================= */
+
+.broccoli-main-header {
+    background: #66a82f;
+    padding: 24px 0;
+}
+
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+/* LOGO */
+
+.site-logo img {
+    max-width: 230px;
+}
+
+/* CENTER ICON */
+
+.header-center-icon {
+    flex-shrink: 0;
+}
+
+.circle-icon {
+    width: 78px;
+    height: 78px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 300;
+}
+
+/* SEARCH */
+
+.header-search {
+    flex: 1;
+    max-width: 620px;
+}
+
+.header-search form {
+    position: relative;
+}
+
+.header-search input {
+    width: 100%;
+    height: 56px;
+    border: none;
+    border-radius: 50px;
+    padding: 0 70px 0 28px;
+    outline: none;
+    font-size: 16px;
+}
+
+.header-search button {
+    position: absolute;
+    top: 50%;
+    right: 22px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 22px;
+}
+
+/* ACTIONS */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.account-icon {
+    text-decoration: none;
+    font-size: 28px;
+    color: #111;
+}
+
+.cart-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: #111;
+}
+
+.cart-icon {
+    position: relative;
+    font-size: 28px;
+}
+
+.cart-count {
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #d72638;
+    color: #fff;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.cart-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-content span {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.cart-content strong {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+/* =========================
+NAVBAR
+========================= */
+
+.broccoli-navbar {
+    background: #f2f2f2;
+    padding: 20px 0;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 55px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #111;
+    font-weight: 700;
+    font-size: 17px;
+    transition: 0.3s;
+}
+
+.menu li a:hover {
+    color: #66a82f;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media (max-width: 1200px) {
+
+    .header-wrapper {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .header-search {
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .broccoli-topbar .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .topbar-left,
+    .topbar-right {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .menu {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .header-actions {
+        gap: 15px;
+    }
+
+    .cart-content strong {
+        font-size: 16px;
+    }
+
+}
