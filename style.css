@@ -7,297 +7,1072 @@ Author URI: https://broccoli.agrofarm.com/
 Version: 1.0
 */
 
+/* --- General Reset & Setup --- */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
 }
 
 .container {
-    width: 95%;
-    max-width: 1320px;
-    margin: auto;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-/* =========================
-TOP BAR
-========================= */
-
-.broccoli-topbar {
-    background: #f3f3f3;
-    padding: 10px 0;
-    border-bottom: 1px solid #e5e5e5;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-.broccoli-topbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* --- 1. Top Bar --- */
+.top-bar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111;
 }
 
-.topbar-left,
-.topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 35px;
+.top-bar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 45px;
 }
 
-.topbar-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #222;
-    font-size: 14px;
+.top-bar-left,
+.top-bar-right {
+  display: flex;
+  align-items: center;
 }
 
-.topbar-item a {
-    color: #222;
-    text-decoration: none;
+.top-bar-left {
+  gap: 25px;
 }
 
-.phone-content {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
+.top-bar-left .info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.phone-content small {
-    font-size: 10px;
-    color: #777;
-    text-transform: uppercase;
+.top-bar-left .info-item i {
+  color: #8bc34a; /* Light green for top icons */
+  font-size: 14px;
 }
 
-.phone-content a {
-    font-weight: 700;
-    font-size: 18px;
+/* Phone Block specific styling */
+.phone-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.language-switcher {
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
+.phone-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.phone-text .phone-label {
+  font-size: 10px;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.phone-text .phone-number {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.top-bar-right {
+  gap: 25px;
+}
+
+.language-selector {
+  cursor: pointer;
+}
+
+.language-selector i {
+  color: #8bc34a;
+  margin-left: 3px;
 }
 
 .social-icons {
-    display: flex;
-    align-items: center;
-    gap: 18px;
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
 }
 
-.social-icons a {
-    text-decoration: none;
-    color: #111;
-    font-size: 18px;
-    font-weight: 600;
+.social-icons a:hover {
+  color: #8bc34a;
 }
 
-/* =========================
-MAIN HEADER
-========================= */
-
-.broccoli-main-header {
-    background: #66a82f;
-    padding: 24px 0;
+/* --- 2. Main Header (Green Background) --- */
+.main-header {
+  background-color: #6da73d; /* Fresh Broccoli Green */
+  padding: 25px 0;
 }
 
-.header-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 30px;
+.main-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* LOGO */
-
-.site-logo img {
-    max-width: 230px;
+/* Logo Area */
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
 }
 
-/* CENTER ICON */
+.logo-wrapper img {
+  width: 35px;
+  height: auto;
+}
 
-.header-center-icon {
-    flex-shrink: 0;
+.logo-text {
+  font-size: 32px;
+  font-weight: 900;
+  color: #222222; /* Dark text on green */
+  letter-spacing: -0.5px;
+}
+
+/* Middle Search Area */
+.middle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+  max-width: 650px;
+  margin: 0 40px;
 }
 
 .circle-icon {
-    width: 78px;
-    height: 78px;
-    border: 4px solid #fff;
-    border-radius: 50%;
-    color: #fff;
-    font-size: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 300;
+  width: 45px;
+  height: 45px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-size: 22px;
+  flex-shrink: 0;
 }
 
-/* SEARCH */
-
-.header-search {
-    flex: 1;
-    max-width: 620px;
+.search-box {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 50px;
+  height: 48px;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 20px;
+  align-items: center;
 }
 
-.header-search form {
-    position: relative;
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
 }
 
-.header-search input {
-    width: 100%;
-    height: 56px;
-    border: none;
-    border-radius: 50px;
-    padding: 0 70px 0 28px;
-    outline: none;
-    font-size: 16px;
+.search-box input::placeholder {
+  color: #999;
 }
 
-.header-search button {
-    position: absolute;
-    top: 50%;
-    right: 22px;
-    transform: translateY(-50%);
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: 22px;
+.search-box button {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+  padding-left: 10px;
 }
 
-/* ACTIONS */
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 28px;
+/* Right Actions (User & Cart) */
+.right-actions {
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }
 
-.account-icon {
-    text-decoration: none;
-    font-size: 28px;
-    color: #111;
+.user-icon {
+  font-size: 22px;
+  color: #222222;
 }
 
 .cart-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    text-decoration: none;
-    color: #111;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
 }
 
 .cart-icon {
-    position: relative;
-    font-size: 28px;
+  position: relative;
+  font-size: 24px;
+  color: #222222;
 }
 
-.cart-count {
-    position: absolute;
-    top: -10px;
-    right: -12px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: #d72638;
-    color: #fff;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: #d81b1b; /* Red badge */
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.cart-content {
-    display: flex;
-    flex-direction: column;
+.cart-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
 }
 
-.cart-content span {
-    font-size: 13px;
-    font-weight: 700;
+.cart-details .cart-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #222222;
 }
 
-.cart-content strong {
-    font-size: 20px;
-    font-weight: 800;
+.cart-details .cart-price {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff; /* White price text */
 }
 
+/* --- 3. Bottom Navigation --- */
+.bottom-nav {
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.nav-list {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+
+.nav-list li {
+  margin: 0 25px;
+}
+
+.nav-list a {
+  display: block;
+  padding: 20px 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1f2937; /* Dark nav links */
+  transition: color 0.3s ease;
+}
+
+.nav-list a:hover {
+  color: #6da73d;
+}
 /* =========================
-NAVBAR
-========================= */
-
-.broccoli-navbar {
-    background: #f2f2f2;
-    padding: 20px 0;
+FOOTER
+========================= */ /* --- General Reset --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #4a4a4a;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #6da73d;
+}
+ul {
+  list-style: none;
+}
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-.menu {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 55px;
+/* --- Footer Main Styles --- */
+.site-footer {
+  background-color: #f6f5ef; /* Light cream background */
+  padding-top: 70px;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-.menu li a {
-    text-decoration: none;
-    color: #111;
-    font-weight: 700;
-    font-size: 17px;
-    transition: 0.3s;
+/* 5-Column Grid Layout */
+.footer-widgets {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1fr 2fr;
+  gap: 40px;
+  margin-bottom: 50px;
 }
 
-.menu li a:hover {
-    color: #66a82f;
+.widget-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a2623;
+  margin-bottom: 25px;
 }
 
-/* =========================
-RESPONSIVE
-========================= */
-
-@media (max-width: 1200px) {
-
-    .header-wrapper {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .header-search {
-        order: 3;
-        width: 100%;
-        max-width: 100%;
-    }
-
+/* --- Column 1: Brand & Info --- */
+.brand-widget .footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  text-decoration: none;
 }
 
-@media (max-width: 768px) {
+.brand-widget .footer-logo svg {
+  width: 30px;
+  height: 30px;
+}
 
-    .broccoli-topbar .container {
-        flex-direction: column;
-        gap: 15px;
-    }
+.brand-widget .footer-logo span {
+  font-size: 28px;
+  font-weight: 900;
+  color: #222;
+}
 
-    .topbar-left,
-    .topbar-right {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+.brand-widget p {
+  margin-bottom: 25px;
+  padding-right: 20px;
+}
 
-    .menu {
-        flex-wrap: wrap;
-        gap: 20px;
-    }
+.contact-list {
+  margin-bottom: 25px;
+}
 
-    .header-actions {
-        gap: 15px;
-    }
+.contact-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 15px;
+}
 
-    .cart-content strong {
-        font-size: 16px;
-    }
+.contact-list i {
+  color: #555;
+  margin-top: 4px;
+}
 
+.social-links {
+  display: flex;
+  gap: 20px;
+}
+
+.social-links a {
+  color: #222;
+  font-size: 16px;
+}
+
+/* --- Columns 2, 3, 4: Nav Links --- */
+.link-widget ul li {
+  margin-bottom: 15px;
+}
+
+/* --- Column 5: Newsletter --- */
+.newsletter-widget p {
+  margin-bottom: 20px;
+}
+
+.newsletter-form {
+  display: flex;
+  height: 48px;
+  margin-bottom: 30px;
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 0 15px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+  background: #ffffff;
+}
+
+.newsletter-form button {
+  background-color: #8bc34a; /* Green button */
+  color: #ffffff;
+  border: none;
+  width: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.newsletter-form button:hover {
+  background-color: #79a206;
+}
+
+.payment-heading {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a2623;
+  margin-bottom: 15px;
+}
+
+/* Placeholder for payment icons */
+.payment-icons img {
+  max-width: 100%;
+  height: auto;
+  background: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+/* --- Bottom Bar --- */
+.footer-bottom-wrapper {
+  position: relative; /* For scroll-to-top button */
+}
+
+.footer-bottom {
+  border-top: 1px solid #e8e8e8;
+  padding: 25px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottom-links {
+  display: flex;
+  gap: 25px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #222;
+}
+
+/* --- Scroll to Top Button (Diamond Shape) --- */
+.scroll-top-btn {
+  position: absolute;
+  right: 40px;
+  top: -20px; /* Pulls it up halfway over the border line */
+  width: 40px;
+  height: 40px;
+  background-color: #f6f5ef;
+  border: 1px solid #e8e8e8;
+  transform: rotate(45deg); /* Makes it a diamond */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #222;
+  transition: all 0.3s ease;
+}
+
+.scroll-top-btn i {
+  transform: rotate(-45deg); /* Counter-rotates the icon so it stays straight */
+  font-size: 14px;
+}
+
+.scroll-top-btn:hover {
+  background-color: #8bc34a;
+  color: #fff;
+  border-color: #8bc34a;
+}
+/* footer end */
+
+/*home body*/
+
+/* Layout Wrapper */
+.hero-wrapper {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  border: 1px solid #eee;
+}
+.sidebar-title {
+  background: #f4f4f4;
+  padding: 15px;
+  font-weight: bold;
+}
+.category-list {
+  list-style: none;
+}
+.category-list li {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f9f9f9;
+}
+.category-list li a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* Hero Slider Area */
+.hero-slider {
+  flex: 1;
+  background: #fdf5e6; /* Placeholder color, replace with image */
+  padding: 60px;
+  display: flex;
+  align-items: center;
+}
+.hero-content h1 {
+  font-size: 40px;
+  margin: 10px 0;
+}
+.subtitle {
+  color: #8bc34a;
+  font-weight: bold;
+}
+.btn-shop {
+  background: #8bc34a;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Features Bar */
+.features-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px;
+  border: 1px solid #eee;
+  margin-top: 30px;
+}
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.icon {
+  font-size: 24px;
+}
+
+/* our product*/
+
+.products-section {
+  text-align: center;
+  padding: 50px 0;
+}
+.subtitle {
+  color: #777;
+  margin-bottom: 30px;
+}
+/* --- GENERAL SETTINGS --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: sans-serif;
+  padding: 50px;
+}
+
+.product-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- TABS NAVIGATION --- */
+.tabs-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  cursor: pointer;
+  padding: 15px 30px;
+  position: relative;
+  text-transform: uppercase;
+}
+
+/* The vertical separator line */
+.tab-btn:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 15px;
+  width: 1px;
+  background-color: #ddd;
+}
+
+/* Active Tab Styling */
+.tab-btn.active {
+  color: #79a206; /* The specific green from your design */
+}
+
+.tab-btn.active::before {
+  content: "";
+  position: absolute;
+  bottom: -1px; /* Align with border-bottom of header */
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background-color: #79a206;
+}
+
+/* --- TAB PANELS (Hide/Show Logic) --- */
+.tab-panel {
+  display: none; /* Hidden by default */
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.tab-panel.active {
+  display: block; /* Shows only the active panel */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- PRODUCT GRID --- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+/* --- PRODUCT CARD --- */
+.product-card {
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.product-img-wrapper {
+  background-color: #fcfcfc; /* Slight off-white background for images */
+  position: relative;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 250px;
+}
+
+.product-img-wrapper img {
+  max-width: 100%;
+  height: auto;
+}
+
+.badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #79a206;
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px; /* Pill shape */
+}
+
+.product-info {
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #f0f0f0;
+}
+
+.stars {
+  color: #f39c12;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.stars span {
+  color: #79a206;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.product-title {
+  font-size: 16px;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.price-wrap {
+  font-size: 16px;
+}
+
+.new-price {
+  color: #79a206;
+  font-weight: 800;
+}
+
+.old-price {
+  color: #b3cc86; /* Lighter green for strikethrough */
+  text-decoration: line-through;
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+/* --- General Section Styles --- */
+.top-categories-section {
+  background-color: #f6f5ef; /* Matches the light cream background */
+  padding: 80px 20px;
+  font-family: sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- Heading Styles --- */
+.section-heading {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-heading h2 {
+  font-size: 36px;
+  font-weight: 800;
+  color: #1a2623; /* Dark green/black text */
+  margin-bottom: 15px;
+}
+
+.section-heading p {
+  font-size: 16px;
+  color: #4a4a4a;
+}
+
+/* --- Grid Layout --- */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns of equal width */
+  gap: 30px; /* Space between cards */
+}
+
+/* --- Category Card Styles --- */
+.category-card {
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  padding: 40px 20px;
+  text-align: center;
+  text-decoration: none; /* Removes underline from links */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Icon Blob (The background behind the icon) --- */
+.icon-blob {
+  width: 90px;
+  height: 90px;
+  background-color: #eff3e0; /* The light yellowish-green blob color */
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; /* Creates an irregular blob shape */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+/* Placeholder styling (Remove this when you add real <img> tags) */
+.placeholder-icon {
+  font-size: 35px;
+}
+
+.icon-blob img {
+  max-width: 50px;
+  height: auto;
+}
+
+/* --- Text Styles inside Card --- */
+.category-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a2623;
+  margin-bottom: 10px;
+}
+
+.category-card .item-count {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333333;
+}
+
+/* --- Global Resets & Container --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: sans-serif;
+  color: #333;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- 1. CTA Section --- */
+.cta-section {
+  background-color: #f0f3f2;
+  padding: 30px 0;
+  margin-bottom: 50px;
+}
+.cta-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cta-container h2 {
+  font-size: 22px;
+  color: #1a2623;
+}
+.btn-make-call {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 12px 25px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+.btn-make-call:hover {
+  background: #79a206;
+  color: white;
+  border-color: #79a206;
+}
+
+/* --- 2. Promo Banners Grid --- */
+.promo-banners-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 60px;
+}
+.promo-banner {
+  position: relative;
+  padding: 40px 30px;
+  border-radius: 4px;
+  color: white;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.orange-banner {
+  background: #f38f29;
+} /* Replace with your actual image later */
+.green-banner {
+  background: #1b3d18;
+}
+
+.hot-sales {
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+.promo-banner h2 {
+  font-size: 28px;
+  margin-bottom: 5px;
+  font-weight: 800;
+}
+.promo-banner p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+.btn-buy-now {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 1px solid white;
+  padding-bottom: 2px;
+}
+
+/* Mockup image placement (Replace with absolute positioning of real PNG images later) */
+.banner-img-placeholder {
+  position: absolute;
+  right: 20px;
+  bottom: -10px;
+  font-size: 120px;
+  opacity: 0.8;
+}
+
+/* --- 3. Product Lists Grid --- */
+.product-lists-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.column-title {
+  font-size: 22px;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.column-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 40px;
+  height: 2px;
+  background-color: #79a206;
+}
+
+.small-products-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Small Product Card */
+.small-product-card {
+  border: 1px solid #eaeaea;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: 0.3s;
+  background: #fff;
+}
+.small-product-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-color: #d1e2b5;
+}
+
+.img-box {
+  background: #f9f9f9;
+  padding: 10px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.img-box img {
+  max-width: 100%;
+  height: auto;
+}
+
+.info-box {
+  flex: 1;
+}
+.info-box .stars {
+  color: #f39c12;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.info-box h4 {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: #1a2623;
+  font-weight: bold;
+}
+.price .new {
+  color: #79a206;
+  font-weight: bold;
+  font-size: 14px;
+}
+.price .old {
+  color: #b3cc86;
+  text-decoration: line-through;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+/* Pagination Dots */
+.dots-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.dot.active {
+  background: #79a206;
+}
+
+/* --- 4. Brands Section --- */
+.brands-section {
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+  padding: 40px 0;
+  background: #fdfdfd;
+}
+.brands-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  opacity: 0.6; /* Fades the logos */
+}
+.brands-wrapper img {
+  max-width: 150px;
+  height: auto;
+  filter: grayscale(100%);
+  transition: 0.3s;
+}
+.brands-wrapper img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
 }

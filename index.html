@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Product Tabs</title>
+    <style>
+        /* --- GENERAL SETTINGS --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: sans-serif; padding: 50px; }
+        
+        .product-section { max-width: 1200px; margin: 0 auto; }
+
+        /* --- TABS NAVIGATION --- */
+        .tabs-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            cursor: pointer;
+            padding: 15px 30px;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        /* The vertical separator line */
+        .tab-btn:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 15px;
+            width: 1px;
+            background-color: #ddd;
+        }
+
+        /* Active Tab Styling */
+        .tab-btn.active {
+            color: #79a206; /* The specific green from your design */
+        }
+
+        .tab-btn.active::before {
+            content: "";
+            position: absolute;
+            bottom: -1px; /* Align with border-bottom of header */
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background-color: #79a206;
+        }
+
+        /* --- TAB PANELS (Hide/Show Logic) --- */
+        .tab-panel {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        
+        .tab-panel.active {
+            display: block; /* Shows only the active panel */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- PRODUCT GRID --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        /* --- PRODUCT CARD --- */
+        .product-card {
+            border: 1px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+        }
+
+        .product-img-wrapper {
+            background-color: #fcfcfc; /* Slight off-white background for images */
+            position: relative;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 250px;
+        }
+
+        .product-img-wrapper img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #79a206;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 20px; /* Pill shape */
+        }
+
+        .product-info {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .stars {
+            color: #f39c12;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .stars span {
+            color: #79a206;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .product-title {
+            font-size: 16px;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .price-wrap {
+            font-size: 16px;
+        }
+
+        .new-price {
+            color: #79a206;
+            font-weight: 800;
+        }
+
+        .old-price {
+            color: #b3cc86; /* Lighter green for strikethrough */
+            text-decoration: line-through;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<section class="product-section">
+    
+    <!-- 1. TAB NAVIGATION -->
+    <div class="tabs-header">
+        <button class="tab-btn active" data-target="food-drinks">FOOD & DRINKS</button>
+        <button class="tab-btn" data-target="vegetables">VEGETABLES</button>
+        <button class="tab-btn" data-target="dried-foods">DRIED FOODS</button>
+        <button class="tab-btn" data-target="bread-cake">BREAD & CAKE</button>
+        <button class="tab-btn" data-target="fish-meat">FISH & MEAT</button>
+    </div>
+
+    <!-- 2. TAB CONTENT: FOOD & DRINKS (Active by default) -->
+    <div class="tab-panel active" id="food-drinks">
+        <div class="product-grid">
+            
+            <!-- PRODUCT 1 -->
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <span class="badge">-19%</span>
+                    <img src="https://images.unsplash.com/photo-1582284540020-8ac90f4b1fa6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Oranges and Tomatoes">
+                </div>
+                <div class="product-info">
+                    <div class="stars">★★★★☆ <span>(24)</span></div>
+                    <h3 class="product-title">Carrots Group Scal</h3>
+                    <div class="price-wrap">
+                        <span class="new-price">$32.00</span>
+                        <span class="old-price">$46.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 2 -->
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <span class="badge">-19%</span>
+                    <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Broccoli">
+                </div>
+                <div class="product-info">
+                    <div class="stars">★★★★☆ <span>(24)</span></div>
+                    <h3 class="product-title">Fresh Broccoli</h3>
+                    <div class="price-wrap">
+                        <span class="new-price">$32.00</span>
+                        <span class="old-price">$46.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 3 -->
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <span class="badge">NEW</span>
+                    <img src="https://images.unsplash.com/photo-1550828520-4cb496926fc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Passion Fruit">
+                </div>
+                <div class="product-info">
+                    <div class="stars">★★★★★ <span>(12)</span></div>
+                    <h3 class="product-title">Orange Fresh Juice</h3>
+                    <div class="price-wrap">
+                        <span class="new-price">$75.00</span>
+                        <span class="old-price">$92.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 4 -->
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <span class="badge">NEW</span>
+                    <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Red Onions">
+                </div>
+                <div class="product-info">
+                    <div class="stars">★★★★☆ <span>(8)</span></div>
+                    <h3 class="product-title">Poltry Farm Meat</h3> <!-- Text matches your design -->
+                    <div class="price-wrap">
+                        <span class="new-price">$78.00</span>
+                        <span class="old-price">$85.00</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 3. TAB CONTENT: VEGETABLES -->
+    <div class="tab-panel" id="vegetables">
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <span class="badge">NEW</span>
+                    <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Broccoli">
+                </div>
+                <div class="product-info">
+                    <div class="stars">★★★★★ <span>(50)</span></div>
+                    <h3 class="product-title">Only Vegetables Here</h3>
+                    <div class="price-wrap">
+                        <span class="new-price">$10.00</span>
+                    </div>
+                </div>
+            </div>
+            <!-- More products can go here -->
+        </div>
+    </div>
+
+    <!-- 4. TAB CONTENT: DRIED FOODS (Empty for demo) -->
+    <div class="tab-panel" id="dried-foods"><div class="product-grid"><h2>Dried Foods Content Here</h2></div></div>
+
+    <!-- 5. TAB CONTENT: BREAD & CAKE (Empty for demo) -->
+    <div class="tab-panel" id="bread-cake"><div class="product-grid"><h2>Bread Content Here</h2></div></div>
+
+    <!-- 6. TAB CONTENT: FISH & MEAT (Empty for demo) -->
+    <div class="tab-panel" id="fish-meat"><div class="product-grid"><h2>Fish & Meat Content Here</h2></div></div>
+
+</section>
+
+<!-- --- JAVASCRIPT --- -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Get all the buttons and all the panels
+    const buttons = document.querySelectorAll(".tab-btn");
+    const panels = document.querySelectorAll(".tab-panel");
+
+    // 2. Add a click event to every button
+    buttons.forEach(function(button) {
+        button.addEventListener("click", function() {
+            
+            // A. Remove 'active' class from ALL buttons
+            buttons.forEach(function(btn) {
+                btn.classList.remove("active");
+            });
+
+            // B. Remove 'active' class from ALL panels
+            panels.forEach(function(panel) {
+                panel.classList.remove("active");
+            });
+
+            // C. Add 'active' class to the clicked button
+            this.classList.add("active");
+
+            // D. Find the ID we need to show (from data-target) and add 'active' to it
+            const targetID = this.getAttribute("data-target");
+            document.getElementById(targetID).classList.add("active");
+            
+        });
+    });
+});
+</script>
+
+</body>
+</html>
