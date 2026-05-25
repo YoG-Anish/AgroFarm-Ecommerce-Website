@@ -97,6 +97,91 @@ function agrofarm_register_customizer($wp_customize)
         'settings' => 'agrofarm_header_phone',
     ));
 
+    // Footer section
+    $wp_customize->add_section('agrofarm_footer', array(
+        'title' => __('Footer', 'agrofarm'),
+        'priority' => 30,
+    ));
+    
+    // footer description
+    $wp_customize->add_setting('agrofarm_footer_description', array(
+        'default' => '',
+        'type' => 'theme_mod',
+    ));
+    $wp_customize->add_control('agrofarm_footer_description', array(
+        'label' => __('Description', 'agrofarm'),
+        'section' => 'agrofarm_footer',
+        'settings' => 'agrofarm_footer_description',
+    ));
+
+    // footer address 
+    $wp_customize->add_setting('agrofarm_footer_address', array(
+        'default' => '',
+        'type' => 'theme_mod',
+    ));
+    $wp_customize->add_control('agrofarm_footer_address', array(
+        'label' => __('Address', 'agrofarm'),
+        'section' => 'agrofarm_footer',
+        'settings' => 'agrofarm_footer_address',
+    ));
+
+    // footer phone 
+    $wp_customize->add_setting('agrofarm_footer_phone', array(
+        'default' => '',
+        'type' => 'theme_mod',
+    ));
+    $wp_customize->add_control('agrofarm_footer_phone', array(
+        'label' => __('Phone', 'agrofarm'),
+        'section' => 'agrofarm_footer',
+        'settings' => 'agrofarm_footer_phone',
+    ));
+
+    //footer email
+    $wp_customize->add_setting('agrofarm_footer_email', array(
+        'default' => '',
+        'type' => 'theme_mod',
+    ));
+    $wp_customize->add_control('agrofarm_footer_email', array(
+        'label' => __('Email', 'agrofarm'),
+        'section' => 'agrofarm_footer',
+        'settings' => 'agrofarm_footer_email',
+    ));
+
+    // footer menu 1
+    $wp_customize->add_setting('agrofarm_footer_menu_1', array(
+        'default' => '',
+        'type' => 'theme_mod',
+    ));    
+    $wp_customize->add_control('agrofarm_footer_menu_1', array(
+        'label' => __('Footer Menu 1', 'agrofarm'),
+        'section' => 'agrofarm_footer',
+        'settings' => 'agrofarm_footer_menu_1',
+    ));
+
+    //footer menu 2 
+    $wp_customize->add_setting('agrofarm_footer_menu_2', array(
+        'default' => '',
+        'type' => 'theme_mod',
+    ));    
+    $wp_customize->add_control('agrofarm_footer_menu_2', array(
+        'label' => __('Footer Menu 2', 'agrofarm'),
+        'section' => 'agrofarm_footer',
+        'settings' => 'agrofarm_footer_menu_2',
+    ));
+
+    //footer menu 3
+    $wp_customize->add_setting('agrofarm_footer_menu_3', array(
+        'default' => '',
+        'type' => 'theme_mod',
+    ));    
+    $wp_customize->add_control('agrofarm_footer_menu_3', array(
+        'label' => __('Footer Menu 3', 'agrofarm'),
+        'section' => 'agrofarm_footer',
+        'settings' => 'agrofarm_footer_menu_3',
+    ));
+
+    //
+
     
 }
 add_action('customize_register', 'agrofarm_register_customizer');
