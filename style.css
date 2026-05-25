@@ -6,7 +6,16 @@ Author: Anish Maka
 Author URI: https://broccoli.agrofarm.com/
 Version: 1.0
 */
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;700;800&display=swap');
 
+body {
+    font-family: 'Mukta', sans-serif;
+}
+
+/* Optional: If you want specific styling only when the site is in Nepali */
+html[lang="ne-NP"] body {
+    line-height: 1.8; /* Nepali text often needs more breathing room */
+}
 /* --- General Reset & Setup --- */
 * {
   box-sizing: border-box;
@@ -1300,4 +1309,126 @@ body {
     background: #79a206;
     width: 10px;
     height: 10px;
+}
+
+
+/* Container to hold input and button side-by-side */
+.footer-newsletter-inline {
+    display: flex;
+    width: 100%;
+    max-width: 300px; /* Adjust based on your layout */
+    height: 50px;
+    border: 1px solid #e1e9ed; /* Light blue/grey border from image */
+    background: #fff;
+}
+
+/* Style the Email Input field */
+.footer-newsletter-inline .wpcf7-form-control.wpcf7-email {
+    flex: 1;
+    border: none !important; /* Remove CF7 default border */
+    padding: 0 15px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    background: transparent;
+}
+
+/* Style the Submit Button */
+.footer-newsletter-inline .newsletter-btn {
+    background-color: #8bc34a; /* The Broccoli Green */
+    border: none;
+    color: #fff;
+    width: 55px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+}
+
+.footer-newsletter-inline .newsletter-btn:hover {
+    background-color: #79a206; /* Slightly darker green on hover */
+}
+
+/* The Icon inside the button */
+.footer-newsletter-inline .newsletter-btn i {
+    font-size: 18px;
+    transform: rotate(-10deg); /* Tilt to match the image style */
+}
+
+/* Remove default CF7 loader margin */
+.wpcf7 .wpcf7-spinner {
+    position: absolute;
+    bottom: -30px;
+}
+
+
+/* --- Language Selector Styling --- */
+.language-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    position: relative;
+    padding: 5px 0;
+}
+
+/* Match the exact bold font from your image */
+.language-selector .current-lang {
+    font-size: 13px;
+    font-weight: 800; /* Extra bold */
+    color: #111111;
+    font-family: sans-serif;
+}
+
+/* Thin arrow style */
+.language-selector i {
+    font-size: 11px;
+    color: #333;
+    font-weight: 300;
+}
+
+/* --- The Dropdown Menu --- */
+.language-selector .lang-dropdown {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    list-style: none;
+    padding: 10px 0;
+    min-width: 120px;
+    z-index: 999;
+    border-radius: 4px;
+}
+
+/* Show dropdown when hovering over the selector */
+.language-selector:hover .lang-dropdown {
+    display: block;
+}
+
+/* Style the language links inside the dropdown */
+.lang-dropdown li {
+    padding: 0;
+}
+
+.lang-dropdown li a {
+    display: block;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.lang-dropdown li a:hover {
+    background-color: #f6f5ef; /* Light cream hover color */
+    color: #6da73d; /* Broccoli Green */
+}
+
+/* Hide the current language from the dropdown list */
+.lang-dropdown li.current-lang {
+    display: none;
 }

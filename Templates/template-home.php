@@ -12,39 +12,34 @@ get_header();
             <div class="sidebar-title">☰ CATEGORIES</div>
             <ul class="category-list">
                 <?php
-                // 1. Fetch WooCommerce Product Categories
+                // 1. Fetch Categories (Polylang automatically filters these by current language)
                 $categories = get_terms(array(
                     'taxonomy'   => 'product_cat',
-                    'number' => 6,
-                    'hide_empty' => false, // Shows category even if it has 0 products
-                    'parent'     => 0,     // Only get top-level (Parent) categories
+                    'number'     => 6,
+                    'hide_empty' => false, // Set to false so they show even if you haven't added Nepali products yet
+                    'parent'     => 0,
                     'orderby'    => 'name',
                     'order'      => 'ASC'
                 ));
 
-                if (! empty($categories) && ! is_wp_error($categories)) :
+                if (!empty($categories) && !is_wp_error($categories)) :
                     foreach ($categories as $category) :
-                        // 2. Get the Category Link
                         $category_link = get_term_link($category);
 
-                        // 3. Get the Category Thumbnail (Featured Image)
+                        // 2. Get the Thumbnail (Note: You must upload the image to the NEPALI category too!)
                         $thumbnail_id = get_term_meta($category->term_id, 'thumbnail_id', true);
                         $image_url    = wp_get_attachment_image_url($thumbnail_id, 'thumbnail');
                 ?>
-
                         <li>
                             <a href="<?php echo esc_url($category_link); ?>">
                                 <?php if ($image_url) : ?>
                                     <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($category->name); ?>" class="cat-icon">
                                 <?php else : ?>
-                                    <!-- Fallback if no image is uploaded -->
                                     <span class="cat-icon-placeholder">📦</span>
                                 <?php endif; ?>
-
                                 <?php echo esc_html($category->name); ?>
                             </a>
                         </li>
-
                 <?php
                     endforeach;
                 endif;
@@ -54,7 +49,6 @@ get_header();
 
         <div class="hero-slider">
             <div class="hero-inner">
-                <!-- Content Area -->
                 <div class="hero-content">
                     <?php if (get_field('hero_discount_text')): ?>
                         <p class="subtitle"><?php echo esc_html(get_field('hero_discount_text')); ?></p>
@@ -62,12 +56,16 @@ get_header();
 
                     <h1><?php echo esc_html(get_field('hero_title')); ?></h1>
 
-                    <a href="<?php echo esc_url(get_permalink(get_option('woocommerce_shop_page_id'))) ?>" class="btn-shop">
+                    <?php
+                    // DYNAMIC SHOP LINK: Finds the translated version of the Shop page
+                    $shop_page_id = get_option('woocommerce_shop_page_id');
+                    $translated_shop_id = function_exists('pll_get_post') ? pll_get_post($shop_page_id) : $shop_page_id;
+                    ?>
+                    <a href="<?php echo esc_url(get_permalink($translated_shop_id)) ?>" class="btn-shop">
                         <?php echo esc_html(get_field('hero_button_text')); ?>
                     </a>
                 </div>
 
-                <!-- Image Area -->
                 <div class="hero-image">
                     <?php
                     $hero_banner = get_field('hero_banner');
@@ -76,12 +74,6 @@ get_header();
                     <?php endif; ?>
                 </div>
             </div>
-
-            <!-- Static Slider Dots to match design
-            <div class="slider-dots">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-            </div> -->
         </div>
     </section>
 
@@ -110,113 +102,116 @@ get_header();
         <p class="subtitle">A highly efficient slip-ring scanner for today's diagnostic requirements.</p>
 
         <section class="product-section">
+    <?php
+    // 1. Gather the ACF Field names
+    $tab_fields = ['category_tab1', 'category_tab2', 'category_tab3', 'category_tab4', 'category_tab5'];
+    $valid_tabs = [];
+
+    // 2. Build a dynamic array of translated categories based on ACF selections
+    foreach ($tab_fields as $field_name) {
+        $selected_id = get_field($field_name); // Assuming Return Format is "Term ID"
+        
+        if ($selected_id) {
+            // Get translated ID for current language
+            $lang_id = function_exists('pll_get_term') ? pll_get_term($selected_id) : $selected_id;
+            $term = get_term($lang_id);
+            
+            if ($term && !is_wp_error($term)) {
+                $valid_tabs[] = $term; // Store the full term object
+            }
+        }
+    }
+    ?>
+
+    <!-- 1. TAB NAVIGATION -->
+    <?php if (!empty($valid_tabs)) : ?>
+        <div class="tabs-header">
             <?php
-            // 1. Define the category slugs you want to show as tabs
-            // Make sure these slugs match exactly what is in WooCommerce > Categories
-            $tab_categories = array(
-                'fruits' => 'Fruits',
-                'vegetable'  => 'Vegetables',
-                'dried-foods' => 'Dried Fruit',
-                'bread-cake'  => 'Bread & Cake',
-                'fish-meat'   => 'Fish & Meat'
-            );
+            foreach ($valid_tabs as $index => $term) :
+                $active_class = ($index == 0) ? 'active' : '';
             ?>
+                <button class="tab-btn <?php echo $active_class; ?>" data-target="tab-<?php echo $term->slug; ?>">
+                    <?php echo esc_html($term->name); ?>
+                </button>
+            <?php endforeach; ?>
+        </div>
 
-            <!-- 1. TAB NAVIGATION -->
-            <div class="tabs-header">
-                <?php
-                $count = 0;
-                foreach ($tab_categories as $slug => $name) :
-                    $active_class = ($count == 0) ? 'active' : '';
-                ?>
-                    <button class="tab-btn <?php echo $active_class; ?>" data-target="<?php echo $slug; ?>">
-                        <?php echo esc_html($name); ?>
-                    </button>
-                <?php
-                    $count++;
-                endforeach;
-                ?>
-            </div>
+        <!-- 2. TAB CONTENT PANELS -->
+        <?php foreach ($valid_tabs as $index => $term) :
+            $active_panel = ($index == 0) ? 'active' : '';
+        ?>
+            <div class="tab-panel <?php echo $active_panel; ?>" id="tab-<?php echo $term->slug; ?>">
+                <div class="product-grid">
+                    <?php
+                    $args = array(
+                        'post_type'      => 'product',
+                        'posts_per_page' => 4,
+                        'tax_query'      => array(
+                            array(
+                                'taxonomy' => 'product_cat',
+                                'field'    => 'term_id',
+                                'terms'    => $term->term_id,
+                            ),
+                        ),
+                        'orderby'        => 'date',
+                        'order'          => 'DESC'
+                    );
 
-            <!-- 2. TAB CONTENT PANELS -->
-            <?php
-            $panel_count = 0;
-            foreach ($tab_categories as $slug => $name) :
-                $active_panel = ($panel_count == 0) ? 'active' : '';
-            ?>
-                <div class="tab-panel <?php echo $active_panel; ?>" id="<?php echo $slug; ?>">
-                    <div class="product-grid">
-                        <?php
-                        // Query Products for this specific category
-                        $args = array(
-                            'post_type'      => 'product',
-                            'posts_per_page' => 4,
-                            'product_cat'    => $slug, // Filter by slug
-                            'orderby'        => 'date',
-                            'order'          => 'DESC'
-                        );
+                    $loop = new WP_Query($args);
 
-                        $loop = new WP_Query($args);
-
-                        if ($loop->have_posts()) :
-                            while ($loop->have_posts()) : $loop->the_post();
-                                global $product;
-                        ?>
-
-                                <div class="product-card">
-                                    <div class="product-img-wrapper">
-                                        <!-- Badge Logic: Sale or New -->
-                                        <?php if ($product->is_on_sale()) : ?>
-                                            <span class="badge">-
-                                                <?php
-                                                // Calculate percentage if it's a simple product
-                                                if ($product->is_type('simple')) {
-                                                    $percentage = round((($product->get_regular_price() - $product->get_sale_price()) / $product->get_regular_price()) * 100);
-                                                    echo $percentage . '%';
-                                                } else {
-                                                    echo 'Sale';
+                    if ($loop->have_posts()) :
+                        while ($loop->have_posts()) : $loop->the_post();
+                            global $product;
+                    ?>
+                            <div class="product-card">
+                                <div class="product-img-wrapper">
+                                    <?php if ($product->is_on_sale()) : ?>
+                                        <span class="badge">-
+                                            <?php
+                                            if ($product->is_type('simple')) {
+                                                $regular_price = $product->get_regular_price();
+                                                $sale_price = $product->get_sale_price();
+                                                if($regular_price > 0) {
+                                                    echo round((($regular_price - $sale_price) / $regular_price) * 100) . '%';
                                                 }
-                                                ?></span>
-                                        <?php elseif (date('Y-m-d', strtotime($product->get_date_created())) > date('Y-m-d', strtotime('-7 days'))) : ?>
-                                            <span class="badge">NEW</span>
-                                        <?php endif; ?>
+                                            } else {
+                                                echo 'Sale';
+                                            }
+                                            ?></span>
+                                    <?php elseif (date('Y-m-d', strtotime($product->get_date_created())) > date('Y-m-d', strtotime('-7 days'))) : ?>
+                                        <span class="badge">NEW</span>
+                                    <?php endif; ?>
 
-                                        <a href="<?php the_permalink(); ?>">
-                                            <?php echo woocommerce_get_product_thumbnail('medium'); ?>
-                                        </a>
-                                    </div>
-
-                                    <div class="product-info">
-                                        <!-- Stars Rating -->
-                                        <div class="stars">
-                                            <?php echo wc_get_rating_html($product->get_average_rating()); ?>
-                                            <span>(<?php echo $product->get_review_count(); ?>)</span>
-                                        </div>
-
-                                        <h3 class="product-title">
-                                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                                        </h3>
-
-                                        <div class="price-wrap">
-                                            <?php echo $product->get_price_html(); ?>
-                                        </div>
-                                    </div>
+                                    <a href="<?php the_permalink(); ?>">
+                                        <?php echo woocommerce_get_product_thumbnail('medium'); ?>
+                                    </a>
                                 </div>
 
-                        <?php
-                            endwhile;
-                        else :
-                            echo '<p>No products found in ' . $name . '</p>';
-                        endif;
-                        wp_reset_postdata();
-                        ?>
-                    </div>
+                                <div class="product-info">
+                                    <div class="stars">
+                                        <?php echo wc_get_rating_html($product->get_average_rating()); ?>
+                                        <span>(<?php echo $product->get_review_count(); ?>)</span>
+                                    </div>
+                                    <h3 class="product-title">
+                                        <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                    </h3>
+                                    <div class="price-wrap">
+                                        <?php echo $product->get_price_html(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                    <?php
+                        endwhile;
+                    else :
+                        echo '<p>No products found in ' . esc_html($term->name) . '</p>';
+                    endif;
+                    wp_reset_postdata();
+                    ?>
                 </div>
-            <?php
-                $panel_count++;
-            endforeach;
-            ?>
-        </section>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</section>
     </section>
 
     <section class="top-categories-section">
@@ -332,93 +327,100 @@ get_header();
         <!-- 2. Product Lists Grid -->
         <section class="product-lists-section">
 
-    <?php
-    // Define your specific category slugs and their display titles
-    $sections = [
-        'featured-product'      => 'Featured Products',
-        'most-viewed-product'   => 'Most Viewed Products',
-        'bestseller-products'   => 'Bestseller Products'
-    ];
+            <?php
+            // 1. Define your 3 field names in an array
+            $field_names = ['category_section1', 'category_section2', 'category_section3'];
 
-    foreach ($sections as $slug => $title) :
-        // Setup Query to fetch products from these specific categories
-        $args = [
-            'post_type'      => 'product',
-            'posts_per_page' => 9, // Allows up to 3 slides (3 items per slide)
-            'tax_query'      => [
-                [
-                    'taxonomy' => 'product_cat',
-                    'field'    => 'slug',
-                    'terms'    => $slug,
-                ],
-            ],
-        ];
+            foreach ($field_names as $field_name) :
 
-        $query = new WP_Query($args);
-        ?>
+                // 2. Get the Category ID from ACF
+                $selected_cat_id = get_field($field_name);
 
-        <div class="product-list-column">
-            <h3 class="column-title"><?php echo esc_html($title); ?></h3>
-            
-            <!-- Swiper Container -->
-            <div class="swiper small-product-slider">
-                <div class="swiper-wrapper">
-                    
-                    <?php 
-                    if ($query->have_posts()) : 
-                        $i = 0;
-                        while ($query->have_posts()) : $query->the_post();
-                            global $product;
-                            
-                            // Every 3 products, start a new Swiper Slide
-                            if ($i % 3 == 0) {
-                                echo '<div class="swiper-slide"><div class="small-products-wrapper">';
-                            }
-                            ?>
-                            
-                            <div class="small-product-card">
-                                <div class="img-box">
-                                    <a href="<?php the_permalink(); ?>">
-                                        <?php echo woocommerce_get_product_thumbnail('thumbnail'); ?>
-                                    </a>
-                                </div>
-                                <div class="info-box">
-                                    <div class="stars">
-                                        <?php echo wc_get_rating_html($product->get_average_rating()); ?>
-                                    </div>
-                                    <h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-                                    <div class="price">
-                                        <?php echo $product->get_price_html(); ?>
-                                    </div>
-                                </div>
+                if ($selected_cat_id) :
+
+                    // 3. POLYLANG FIX: Get the translated ID for the current language
+                    // If we are in Nepali, this converts the English ID to the Nepali ID
+                    $current_lang_cat_id = function_exists('pll_get_term') ? pll_get_term($selected_cat_id) : $selected_cat_id;
+
+                    // 4. Get the Category Object so we can show the Title
+                    $category_obj = get_term($current_lang_cat_id);
+            ?>
+
+                    <div class="product-list-column">
+                        <!-- Dynamic Title from Category Name -->
+                        <h3 class="column-title"><?php echo esc_html($category_obj->name); ?></h3>
+
+                        <div class="swiper small-product-slider">
+                            <div class="swiper-wrapper">
+
+                                <?php
+                                // 5. Query 9 products from this specific category
+                                $args = [
+                                    'post_type'      => 'product',
+                                    'posts_per_page' => 9,
+                                    'tax_query'      => [
+                                        [
+                                            'taxonomy' => 'product_cat',
+                                            'field'    => 'term_id',
+                                            'terms'    => $current_lang_cat_id,
+                                        ],
+                                    ],
+                                ];
+
+                                $query = new WP_Query($args);
+
+                                if ($query->have_posts()) :
+                                    $i = 0;
+                                    while ($query->have_posts()) : $query->the_post();
+                                        global $product;
+
+                                        // Group 3 items per slide
+                                        if ($i % 3 == 0) {
+                                            echo '<div class="swiper-slide"><div class="small-products-wrapper">';
+                                        }
+                                ?>
+
+                                        <div class="small-product-card">
+                                            <div class="img-box">
+                                                <a href="<?php the_permalink(); ?>">
+                                                    <?php echo woocommerce_get_product_thumbnail('thumbnail'); ?>
+                                                </a>
+                                            </div>
+                                            <div class="info-box">
+                                                <div class="stars"><?php echo wc_get_rating_html($product->get_average_rating()); ?></div>
+                                                <h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+                                                <div class="price"><?php echo $product->get_price_html(); ?></div>
+                                            </div>
+                                        </div>
+
+                                <?php
+                                        // Close the slide after 3 items
+                                        if ($i % 3 == 2 || ($query->current_post + 1) == $query->post_count) {
+                                            echo '</div></div>';
+                                        }
+                                        $i++;
+                                    endwhile;
+                                    wp_reset_postdata();
+                                else:
+                                    echo '<p>No products found in this category.</p>';
+                                endif;
+                                ?>
+
                             </div>
+                            <!-- Dots -->
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
 
-                            <?php
-                            // Close the slide after 3 products OR at the end of the total results
-                            if ($i % 3 == 2 || ($query->current_post + 1) == $query->post_count) {
-                                echo '</div></div>';
-                            }
-                            $i++;
-                        endwhile; 
-                        wp_reset_postdata();
-                    else:
-                        echo '<p>No products in this category.</p>';
-                    endif; 
-                    ?>
+                <?php endif; // end if selected_cat_id exists 
+                ?>
+            <?php endforeach; ?>
 
-                </div>
-                <!-- Swiper Pagination (Dots) -->
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
-
-    <?php endforeach; ?>
-
-</section>
+        </section>
     </div>
 
     <!-- Brands Carousel Section -->
-    
+
 </main>
 
 <?php get_footer(); ?>

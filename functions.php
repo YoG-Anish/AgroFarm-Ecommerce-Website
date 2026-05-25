@@ -4,9 +4,10 @@ function agrofarm_enqueue_assets()
 {
 
     wp_enqueue_style('agrofarm-style', get_stylesheet_uri());
-    wp_enqueue_style('agrofarm-all-min', get_template_directory_uri() . '/assets/css/all.min.css');
+    wp_enqueue_style('agrofarm-all-min', get_template_directory_uri() . '/assets/css/all.min.css', array(), '1.0');
     wp_enqueue_style('agrofarm-swiper-bundle-min', get_template_directory_uri() . '/assets/css/swiper-bundle.min.css');
 
+    wp_enqueue_script('agrofarm-all-min', get_template_directory_uri() . '/assets/js/icon.js', array(), '1.0', true);
     wp_enqueue_script('agrofarm-swiper-bundle-min', get_template_directory_uri() . '/assets/js/swiper-bundle.min.js', array(), '1.0', true);
     wp_enqueue_script('agrofarm-script', get_template_directory_uri() . '/assets/js/script.js', array(), '1.0', true);
 }
@@ -28,6 +29,10 @@ function agrofarm_menus()
     register_nav_menus(array(
         'primary' => __('Primary Menu', 'agrofarm'),
         'footer' => __('Footer Menu', 'agrofarm'),
+        'footer-menu-1' => __('Footer Menu 1', 'agrofarm'),
+        'footer-menu-2' => __('Footer Menu 2', 'agrofarm'),
+        'footer-menu-3' => __('Footer Menu 3', 'agrofarm'),
+        'footer-menu-4' => __('Footer Menu 4', 'agrofarm'),
     ));
 }
 add_action('init', 'agrofarm_menus');
@@ -180,7 +185,24 @@ function agrofarm_register_customizer($wp_customize)
         'settings' => 'agrofarm_footer_menu_3',
     ));
 
-    //
+    // List of social platforms to create settings for
+    $socials = array('facebook', 'twitter', 'linkedin', 'youtube');
+
+    foreach($socials as $social) {
+        // Add Setting
+        $wp_customize->add_setting( 'agrofarm_' . $social . '_link', array(
+            'default'   => '',
+            'type'      => 'theme_mod',
+            'sanitize_callback' => 'esc_url_raw', // Ensures it's a valid URL
+        ) );
+
+        // Add Control
+        $wp_customize->add_control( 'agrofarm_' . $social . '_link', array(
+            'label'    => ucfirst($social) . ' URL',
+            'section'  => 'agrofarm_footer',
+            'type'     => 'url',
+        ) );
+    }
 
     
 }
@@ -226,3 +248,15 @@ function my_custom_wc_cart_fragments( $fragments ) {
 
 // Remove WooCommerce sidebar
 remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
+
+
+// Register strings for Polylang translation
+add_action('init', function() {
+    if ( function_exists('pll_register_string') ) {
+        // Syntax: pll_register_string('Context', 'String to translate', 'Group');
+        pll_register_string('Agrofarm Header', 'Liwali, Bhaktapur', 'Header');
+        pll_register_string('Agrofarm Header', 'PHONE', 'Header');
+        pll_register_string('Agrofarm Hero', 'Tasty & Healthy Organic Food', 'Hero Section');
+        pll_register_string('Agrofarm Hero', 'SHOP NOW', 'Hero Section');
+    }
+});

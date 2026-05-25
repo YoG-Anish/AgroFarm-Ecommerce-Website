@@ -29,80 +29,94 @@
                     </svg>
                     <span>Broccoli</span>
                 </a>
-                <p>Lorem Ipsum is simply dummy text of the and typesetting industry. Lorem Ipsum is dummy text of the printing.</p>
+                <p><?php echo get_theme_mod('agrofarm_footer_description'); ?></p>
                 <ul class="contact-list">
                     <li>
                         <i class="fa-solid fa-location-dot"></i>
-                        <span>Brooklyn, New York, United States</span>
+                        <span><?php echo get_theme_mod('agrofarm_footer_address'); ?></span>
                     </li>
                     <li>
                         <i class="fa-solid fa-phone-volume"></i>
-                        <span>+0123-456789</span>
+                        <span><?php echo get_theme_mod('agrofarm_footer_phone'); ?></span>
                     </li>
                     <li>
                         <i class="fa-regular fa-envelope"></i>
-                        <span>example@example.com</span>
+                        <span><?php echo get_theme_mod('agrofarm_footer_email'); ?></span>
                     </li>
                 </ul>
                 <div class="social-links">
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <?php
+                    // Fetch values from Customizer
+                    $facebook = get_theme_mod('agrofarm_facebook_link');
+                    $twitter  = get_theme_mod('agrofarm_twitter_link');
+                    $linkedin = get_theme_mod('agrofarm_linkedin_link');
+                    $youtube  = get_theme_mod('agrofarm_youtube_link');
+                    ?>
+
+                    <?php if ($facebook) : ?>
+                        <a href="<?php echo esc_url($facebook); ?>" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                    <?php endif; ?>
+
+                    <?php if ($twitter) : ?>
+                        <a href="<?php echo esc_url($twitter); ?>" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                    <?php endif; ?>
+
+                    <?php if ($linkedin) : ?>
+                        <a href="<?php echo esc_url($linkedin); ?>" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <?php endif; ?>
+
+                    <?php if ($youtube) : ?>
+                        <a href="<?php echo esc_url($youtube); ?>" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                    <?php endif; ?>
                 </div>
             </div>
 
             <!-- Column 2: Company Links -->
             <div class="link-widget">
-                <h4 class="widget-title">Company</h4>
-                <ul>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">All Products</a></li>
-                    <li><a href="#">Locations Map</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Contact us</a></li>
-                </ul>
+                <h4 class="widget-title"><?php echo get_theme_mod('agrofarm_footer_menu_1'); ?></h4>
+                <?php
+                wp_nav_menu(
+                    array(
+                        'theme_location' => 'footer-menu-1',
+                    )
+                )
+                ?>
             </div>
 
             <!-- Column 3: Services Links -->
             <div class="link-widget">
-                <h4 class="widget-title">Services.</h4>
-                <ul>
-                    <li><a href="#">Order tracking</a></li>
-                    <li><a href="#">Wish List</a></li>
-                    <li><a href="#">Login</a></li>
-                    <li><a href="#">My account</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Promotional Offers</a></li>
-                </ul>
+                <h4 class="widget-title"><?php echo get_theme_mod('agrofarm_footer_menu_2'); ?></h4>
+                <?php
+                wp_nav_menu(
+                    array(
+                        'theme_location' => 'footer-menu-2',
+                    )
+                )
+                ?>
             </div>
 
             <!-- Column 4: Customer Care Links -->
             <div class="link-widget">
-                <h4 class="widget-title">Customer Care</h4>
-                <ul>
-                    <li><a href="#">Login</a></li>
-                    <li><a href="#">My account</a></li>
-                    <li><a href="#">Wish List</a></li>
-                    <li><a href="#">Order tracking</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Contact us</a></li>
-                </ul>
+                <h4 class="widget-title"><?php echo get_theme_mod('agrofarm_footer_menu_3'); ?></h4>
+                <?php
+                wp_nav_menu(
+                    array(
+                        'theme_location' => 'footer-menu-3',
+                    )
+                )
+                ?>
             </div>
 
             <!-- Column 5: Newsletter -->
             <div class="newsletter-widget">
-                <h4 class="widget-title">Newsletter</h4>
-                <p>Subscribe to our weekly Newsletter and receive updates via email.</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Email*" required>
-                    <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
-                </form>
+                <?php echo do_shortcode('[contact-form-7 id="0f749e7" title="Email form"]'); ?>
                 <h4 class="payment-heading">We Accept</h4>
                 <div class="payment-icons">
                     <!-- Replace with your actual image path -->
-                    <img src="https://via.placeholder.com/250x30/ffffff/000000?text=PayPal+++Visa+++Discover+++MasterCard+++Amex" alt="Payment Methods">
+                    <!-- link to checkout page -->
+                    <a href="<?php echo get_permalink(get_page_by_path('checkout')); ?>">
+                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/payment-icon.jpg" alt="Payment Methods">
+                    </a>
                 </div>
             </div>
 
@@ -120,12 +134,15 @@
 
         <div class="container">
             <div class="footer-bottom">
-                <p>All Rights Reserved @ Company 2024</p>
-                <ul class="bottom-links">
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Claim</a></li>
-                    <li><a href="#">Privacy & Policy</a></li>
-                </ul>
+                <p>All Rights Reserved @ <?php bloginfo('name'); ?> <?php echo date('Y'); ?></p>
+                <?php 
+                wp_nav_menu(
+                    array(
+                        'theme_location' => 'footer-menu-4',
+                        'menu_class' => 'bottom-links',
+                    )
+                )
+                ?>
             </div>
         </div>
     </div>

@@ -23,26 +23,57 @@ BROCCOLI HEADER START
                     <div class="top-bar-left">
                         <div class="info-item">
                             <i class="fa-regular fa-envelope"></i>
-                            <span><?php echo get_theme_mod('agrofarm_header_email'); ?>'</span>
+                            <span><?php $email = get_theme_mod('agrofarm_header_email');
+                                    echo function_exists('pll__') ? pll__($email) : $email; ?>'</span>
                         </div>
                         <div class="info-item">
                             <i class="fa-solid fa-location-dot"></i>
-                            <span><?php echo get_theme_mod('agrofarm_header_location'); ?></span>
+                            <span><?php $address = get_theme_mod('agrofarm_header_location');
+                                    echo function_exists('pll__') ? pll__($address) : $address; ?></span>
                         </div>
                         <div class="phone-block">
                             <i class="fa-solid fa-phone-volume"></i>
                             <div class="phone-text">
-                                <span class="phone-label">PHONE</span>
-                                <span class="phone-number"><?php echo get_theme_mod('agrofarm_header_phone'); ?></span>
+                                <span class="phone-number"><?php $phone = get_theme_mod('agrofarm_header_phone');
+                                                            echo function_exists('pll__') ? pll__($phone) : $phone; ?></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="top-bar-right">
+                        <!-- 1. THE DYNAMIC LANGUAGE SWITCHER -->
                         <div class="language-selector">
-                            English <i class="fa-solid fa-arrow-down-long"></i>
+                            <?php
+                            if (function_exists('pll_the_languages')) {
+                                // Get all languages in an array
+                                $languages = pll_the_languages(array('raw' => 1));
+
+                                // Find and display ONLY the current language name
+                                foreach ($languages as $lang) {
+                                    if ($lang['current_lang']) {
+                                        echo '<span class="current-lang">' . esc_html($lang['name']) . '</span>';
+                                    }
+                                }
+                            } else {
+                                // Fallback if Polylang is not installed
+                                echo '<span class="current-lang">English</span>';
+                            }
+                            ?>
+
+                            <!-- The Arrow Icon -->
+                            <i class="fa-solid fa-arrow-down-long"></i>
+
+                            <!-- 2. THE DROPDOWN LIST (Shows on Hover) -->
+                            <ul class="lang-dropdown">
+                                <?php
+                                if (function_exists('pll_the_languages')) {
+                                    // This outputs the other languages as links
+                                    pll_the_languages(array('show_names' => 1, 'show_flags' => 0));
+                                }
+                                ?>
+                            </ul>
                         </div>
-                      
+
                         <div class="social-icons">
                             <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
                             <a href="#"><i class="fa-brands fa-twitter"></i></a>
