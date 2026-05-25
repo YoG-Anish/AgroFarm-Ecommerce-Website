@@ -1,3 +1,13 @@
+<section class="brands-section">
+    <div class="container brands-wrapper">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner1.png" alt="Brand Logo">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner1.png" alt="Brand Logo">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner3.png" alt="Brand Logo">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner1.png" alt="Brand Logo">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner2.png" alt="Brand Logo">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner3.png" alt="Brand Logo">
+    </div>
+</section>
 <footer class="site-footer">
     <div class="container">
 
@@ -119,6 +129,7 @@
             </div>
         </div>
     </div>
+
 </footer>
 <?php wp_footer(); ?>
 </body>

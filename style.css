@@ -530,29 +530,112 @@ ul {
   text-decoration: none;
   color: #333;
 }
-
-/* Hero Slider Area */
 .hero-slider {
-  flex: 1;
-  background: #fdf5e6; /* Placeholder color, replace with image */
-  padding: 60px;
-  display: flex;
-  align-items: center;
+    background-color: #f9f9f9; /* Light grey background from image */
+    position: relative;
+    overflow: hidden;
+    padding: 60px 0;
+    border-radius: 5px;
 }
+
+.hero-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* Content Styling */
+.hero-content {
+    flex: 1;
+    z-index: 2;
+}
+
+.hero-content .subtitle {
+    color: #8bc34a; /* Brand Green */
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
 .hero-content h1 {
-  font-size: 40px;
-  margin: 10px 0;
+    font-size: 52px;
+    color: #1a2623;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 30px;
+    max-width: 450px;
 }
-.subtitle {
-  color: #8bc34a;
-  font-weight: bold;
-}
+
 .btn-shop {
-  background: #8bc34a;
-  color: white;
-  padding: 12px 25px;
-  border: none;
-  cursor: pointer;
+    display: inline-block;
+    background-color: #8bc34a;
+    color: #fff;
+    padding: 15px 35px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+}
+
+.btn-shop:hover {
+    background-color: #79a206;
+}
+
+/* Image Styling */
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.hero-image img {
+    max-width: 110%; /* Allow image to slightly overflow for that "large" feel */
+    height: auto;
+    object-fit: contain;
+}
+
+/* Slider Dots */
+.slider-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #8bc34a;
+}
+
+/* Responsive for Mobile */
+@media (max-width: 768px) {
+    .hero-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero-content h1 {
+        font-size: 36px;
+        margin: 0 auto 20px;
+    }
+    .hero-image {
+        margin-top: 30px;
+        justify-content: center;
+    }
 }
 
 /* Features Bar */
@@ -1075,4 +1158,146 @@ body {
 .brands-wrapper img:hover {
   filter: grayscale(0%);
   opacity: 1;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list li {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.category-list li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.category-list li a:hover {
+    background-color: #f9f9f9;
+    color: #8bc34a;
+}
+
+/* This makes the Category Featured Image behave like an icon */
+.cat-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain; /* Keeps the icon sharp */
+    margin-right: 12px;
+}
+
+.cat-icon-placeholder {
+    font-size: 18px;
+    margin-right: 12px;
+}
+
+/* --- The Grid Section --- */
+.product-lists-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 30px;
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+/* CRITICAL FIX: Stops the column from expanding infinitely with the slider */
+.product-list-column {
+    min-width: 0; 
+    overflow: hidden; 
+}
+
+.column-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.column-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 40px;
+    height: 2px;
+    background-color: #79a206;
+}
+
+/* --- Swiper Structure --- */
+.small-product-slider {
+    width: 100%;
+    height: auto;
+    overflow: hidden; /* This hides the other slides */
+    padding-bottom: 40px; /* Space for dots */
+}
+
+.small-products-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Small Card Styling */
+.small-product-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    border: 1px solid #f5f5f5;
+    background: #fff;
+}
+
+.small-product-card .img-box {
+    width: 70px;
+    height: 70px;
+    background: #f9f9f9;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.small-product-card .img-box img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Stars and Price */
+.star-rating {
+    font-size: 10px;
+    color: #f39c12;
+}
+.price ins { text-decoration: none; font-weight: bold; color: #79a206; }
+.price del { font-size: 12px; color: #ccc; margin-left: 5px; }
+
+/* --- Pagination Dots --- */
+.swiper-pagination {
+    bottom: 0 !important;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #ddd;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.dot.active {
+    background: #79a206;
+    width: 10px;
+    height: 10px;
 }

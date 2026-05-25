@@ -27,3 +27,26 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    // Initialize all sliders on the page
+    const productSliders = document.querySelectorAll('.small-product-slider');
+    
+    productSliders.forEach(function(slider) {
+        // We initialize Swiper for each column
+        new Swiper(slider, {
+            slidesPerView: 1,      // 1 slide shows the group of 3 products
+            spaceBetween: 20,
+            loop: false,           // STOP the infinite loop
+            autoplay: false,       // Don't move by itself
+            pagination: {
+                el: slider.querySelector('.swiper-pagination'),
+                clickable: true,
+                bulletClass: 'dot',           // Matches CSS
+                bulletActiveClass: 'active'   // Matches CSS
+            },
+        });
+    });
+
+});

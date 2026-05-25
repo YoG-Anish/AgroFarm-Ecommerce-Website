@@ -5,7 +5,9 @@ function agrofarm_enqueue_assets()
 
     wp_enqueue_style('agrofarm-style', get_stylesheet_uri());
     wp_enqueue_style('agrofarm-all-min', get_template_directory_uri() . '/assets/css/all.min.css');
+    wp_enqueue_style('agrofarm-swiper-bundle-min', get_template_directory_uri() . '/assets/css/swiper-bundle.min.css');
 
+    wp_enqueue_script('agrofarm-swiper-bundle-min', get_template_directory_uri() . '/assets/js/swiper-bundle.min.js', array(), '1.0', true);
     wp_enqueue_script('agrofarm-script', get_template_directory_uri() . '/assets/js/script.js', array(), '1.0', true);
 }
 
@@ -109,3 +111,33 @@ function mytheme_add_woocommerce_support() {
     add_theme_support( 'wc-product-gallery-slider' );
 }
 add_action( 'after_setup_theme', 'mytheme_add_woocommerce_support' );
+
+/**
+ * Update custom cart icon count and price with AJAX
+ */
+add_filter( 'woocommerce_add_to_cart_fragments', 'my_custom_wc_cart_fragments' );
+function my_custom_wc_cart_fragments( $fragments ) {
+    
+    // Refresh the cart count badge
+    ob_start();
+    ?>
+    <span class="cart-badge custom-cart-count">
+        <?php echo WC()->cart->get_cart_contents_count(); ?>
+    </span>
+    <?php
+    $fragments['span.custom-cart-count'] = ob_get_clean();
+    
+    // Refresh the cart total price
+    ob_start();
+    ?>
+    <span class="cart-price custom-cart-total">
+        <?php echo WC()->cart->get_cart_subtotal(); ?>
+    </span>
+    <?php
+    $fragments['span.custom-cart-total'] = ob_get_clean();
+    
+    return $fragments;
+}
+
+// Remove WooCommerce sidebar
+remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );

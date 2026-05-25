@@ -11,31 +11,84 @@ get_header();
         <aside class="sidebar">
             <div class="sidebar-title">☰ CATEGORIES</div>
             <ul class="category-list">
-                <li><a href="#">🍎 Vegetables and Fruits</a></li>
-                <li><a href="#">🥩 Fresh Meat</a></li>
-                <li><a href="#">🐟 Fish and Seafood</a></li>
-                <li><a href="#">🧈 Butter and Cream</a></li>
-                <li><a href="#">🫙 Oil and Vinegar</a></li>
-                <li><a href="#">🍞 Breads</a></li>
-                <li><a href="#">🧃 Apple Juice</a></li>
-                <li><a href="#">🥜 Dry Nuts</a></li>
-                <li><a href="#">More categories +</a></li>
+                <?php
+                // 1. Fetch WooCommerce Product Categories
+                $categories = get_terms(array(
+                    'taxonomy'   => 'product_cat',
+                    'number' => 6,
+                    'hide_empty' => false, // Shows category even if it has 0 products
+                    'parent'     => 0,     // Only get top-level (Parent) categories
+                    'orderby'    => 'name',
+                    'order'      => 'ASC'
+                ));
+
+                if (! empty($categories) && ! is_wp_error($categories)) :
+                    foreach ($categories as $category) :
+                        // 2. Get the Category Link
+                        $category_link = get_term_link($category);
+
+                        // 3. Get the Category Thumbnail (Featured Image)
+                        $thumbnail_id = get_term_meta($category->term_id, 'thumbnail_id', true);
+                        $image_url    = wp_get_attachment_image_url($thumbnail_id, 'thumbnail');
+                ?>
+
+                        <li>
+                            <a href="<?php echo esc_url($category_link); ?>">
+                                <?php if ($image_url) : ?>
+                                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($category->name); ?>" class="cat-icon">
+                                <?php else : ?>
+                                    <!-- Fallback if no image is uploaded -->
+                                    <span class="cat-icon-placeholder">📦</span>
+                                <?php endif; ?>
+
+                                <?php echo esc_html($category->name); ?>
+                            </a>
+                        </li>
+
+                <?php
+                    endforeach;
+                endif;
+                ?>
             </ul>
         </aside>
 
         <div class="hero-slider">
-            <div class="hero-content">
-                <p class="subtitle">UP TO 50% OFF TODAY ONLY!</p>
-                <h1>Tasty & Healthy Organic Food</h1>
-                <button class="btn-shop">SHOP NOW</button>
+            <div class="hero-inner">
+                <!-- Content Area -->
+                <div class="hero-content">
+                    <?php if (get_field('hero_discount_text')): ?>
+                        <p class="subtitle"><?php echo esc_html(get_field('hero_discount_text')); ?></p>
+                    <?php endif; ?>
+
+                    <h1><?php echo esc_html(get_field('hero_title')); ?></h1>
+
+                    <a href="<?php echo esc_url(get_permalink(get_option('woocommerce_shop_page_id'))) ?>" class="btn-shop">
+                        <?php echo esc_html(get_field('hero_button_text')); ?>
+                    </a>
+                </div>
+
+                <!-- Image Area -->
+                <div class="hero-image">
+                    <?php
+                    $hero_banner = get_field('hero_banner');
+                    if ($hero_banner): ?>
+                        <img src="<?php echo esc_url($hero_banner['url']); ?>" alt="<?php echo esc_attr($hero_banner['alt']); ?>">
+                    <?php endif; ?>
+                </div>
             </div>
+
+            <!-- Static Slider Dots to match design
+            <div class="slider-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+            </div> -->
         </div>
     </section>
 
     <!-- Features Section -->
     <section class="features-bar">
         <div class="feature-item">
-            <span class="icon">🚚</span>
+            <span class="icon">🚚</span>'
             <div><strong>Free shipping</strong><br><small>On all orders over $49.00</small></div>
         </div>
         <div class="feature-item">
@@ -57,128 +110,112 @@ get_header();
         <p class="subtitle">A highly efficient slip-ring scanner for today's diagnostic requirements.</p>
 
         <section class="product-section">
+            <?php
+            // 1. Define the category slugs you want to show as tabs
+            // Make sure these slugs match exactly what is in WooCommerce > Categories
+            $tab_categories = array(
+                'fruits' => 'Fruits',
+                'vegetable'  => 'Vegetables',
+                'dried-foods' => 'Dried Fruit',
+                'bread-cake'  => 'Bread & Cake',
+                'fish-meat'   => 'Fish & Meat'
+            );
+            ?>
 
             <!-- 1. TAB NAVIGATION -->
             <div class="tabs-header">
-                <button class="tab-btn active" data-target="food-drinks">FOOD & DRINKS</button>
-                <button class="tab-btn" data-target="vegetables">VEGETABLES</button>
-                <button class="tab-btn" data-target="dried-foods">DRIED FOODS</button>
-                <button class="tab-btn" data-target="bread-cake">BREAD & CAKE</button>
-                <button class="tab-btn" data-target="fish-meat">FISH & MEAT</button>
+                <?php
+                $count = 0;
+                foreach ($tab_categories as $slug => $name) :
+                    $active_class = ($count == 0) ? 'active' : '';
+                ?>
+                    <button class="tab-btn <?php echo $active_class; ?>" data-target="<?php echo $slug; ?>">
+                        <?php echo esc_html($name); ?>
+                    </button>
+                <?php
+                    $count++;
+                endforeach;
+                ?>
             </div>
 
-            <!-- 2. TAB CONTENT: FOOD & DRINKS (Active by default) -->
-            <div class="tab-panel active" id="food-drinks">
-                <div class="product-grid">
+            <!-- 2. TAB CONTENT PANELS -->
+            <?php
+            $panel_count = 0;
+            foreach ($tab_categories as $slug => $name) :
+                $active_panel = ($panel_count == 0) ? 'active' : '';
+            ?>
+                <div class="tab-panel <?php echo $active_panel; ?>" id="<?php echo $slug; ?>">
+                    <div class="product-grid">
+                        <?php
+                        // Query Products for this specific category
+                        $args = array(
+                            'post_type'      => 'product',
+                            'posts_per_page' => 4,
+                            'product_cat'    => $slug, // Filter by slug
+                            'orderby'        => 'date',
+                            'order'          => 'DESC'
+                        );
 
-                    <!-- PRODUCT 1 -->
-                    <div class="product-card">
-                        <div class="product-img-wrapper">
-                            <span class="badge">-19%</span>
-                            <img src="https://images.unsplash.com/photo-1582284540020-8ac90f4b1fa6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Oranges and Tomatoes">
-                        </div>
-                        <div class="product-info">
-                            <div class="stars">★★★★☆ <span>(24)</span></div>
-                            <h3 class="product-title">Carrots Group Scal</h3>
-                            <div class="price-wrap">
-                                <span class="new-price">$32.00</span>
-                                <span class="old-price">$46.00</span>
-                            </div>
-                        </div>
+                        $loop = new WP_Query($args);
+
+                        if ($loop->have_posts()) :
+                            while ($loop->have_posts()) : $loop->the_post();
+                                global $product;
+                        ?>
+
+                                <div class="product-card">
+                                    <div class="product-img-wrapper">
+                                        <!-- Badge Logic: Sale or New -->
+                                        <?php if ($product->is_on_sale()) : ?>
+                                            <span class="badge">-
+                                                <?php
+                                                // Calculate percentage if it's a simple product
+                                                if ($product->is_type('simple')) {
+                                                    $percentage = round((($product->get_regular_price() - $product->get_sale_price()) / $product->get_regular_price()) * 100);
+                                                    echo $percentage . '%';
+                                                } else {
+                                                    echo 'Sale';
+                                                }
+                                                ?></span>
+                                        <?php elseif (date('Y-m-d', strtotime($product->get_date_created())) > date('Y-m-d', strtotime('-7 days'))) : ?>
+                                            <span class="badge">NEW</span>
+                                        <?php endif; ?>
+
+                                        <a href="<?php the_permalink(); ?>">
+                                            <?php echo woocommerce_get_product_thumbnail('medium'); ?>
+                                        </a>
+                                    </div>
+
+                                    <div class="product-info">
+                                        <!-- Stars Rating -->
+                                        <div class="stars">
+                                            <?php echo wc_get_rating_html($product->get_average_rating()); ?>
+                                            <span>(<?php echo $product->get_review_count(); ?>)</span>
+                                        </div>
+
+                                        <h3 class="product-title">
+                                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                        </h3>
+
+                                        <div class="price-wrap">
+                                            <?php echo $product->get_price_html(); ?>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        <?php
+                            endwhile;
+                        else :
+                            echo '<p>No products found in ' . $name . '</p>';
+                        endif;
+                        wp_reset_postdata();
+                        ?>
                     </div>
-
-                    <!-- PRODUCT 2 -->
-                    <div class="product-card">
-                        <div class="product-img-wrapper">
-                            <span class="badge">-19%</span>
-                            <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Broccoli">
-                        </div>
-                        <div class="product-info">
-                            <div class="stars">★★★★☆ <span>(24)</span></div>
-                            <h3 class="product-title">Fresh Broccoli</h3>
-                            <div class="price-wrap">
-                                <span class="new-price">$32.00</span>
-                                <span class="old-price">$46.00</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- PRODUCT 3 -->
-                    <div class="product-card">
-                        <div class="product-img-wrapper">
-                            <span class="badge">NEW</span>
-                            <img src="https://images.unsplash.com/photo-1550828520-4cb496926fc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Passion Fruit">
-                        </div>
-                        <div class="product-info">
-                            <div class="stars">★★★★★ <span>(12)</span></div>
-                            <h3 class="product-title">Orange Fresh Juice</h3>
-                            <div class="price-wrap">
-                                <span class="new-price">$75.00</span>
-                                <span class="old-price">$92.00</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- PRODUCT 4 -->
-                    <div class="product-card">
-                        <div class="product-img-wrapper">
-                            <span class="badge">NEW</span>
-                            <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Red Onions">
-                        </div>
-                        <div class="product-info">
-                            <div class="stars">★★★★☆ <span>(8)</span></div>
-                            <h3 class="product-title">Poltry Farm Meat</h3> <!-- Text matches your design -->
-                            <div class="price-wrap">
-                                <span class="new-price">$78.00</span>
-                                <span class="old-price">$85.00</span>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
-
-            <!-- 3. TAB CONTENT: VEGETABLES -->
-            <div class="tab-panel" id="vegetables">
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-img-wrapper">
-                            <span class="badge">NEW</span>
-                            <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Broccoli">
-                        </div>
-                        <div class="product-info">
-                            <div class="stars">★★★★★ <span>(50)</span></div>
-                            <h3 class="product-title">Only Vegetables Here</h3>
-                            <div class="price-wrap">
-                                <span class="new-price">$10.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- More products can go here -->
-                </div>
-            </div>
-
-            <!-- 4. TAB CONTENT: DRIED FOODS (Empty for demo) -->
-            <div class="tab-panel" id="dried-foods">
-                <div class="product-grid">
-                    <h2>Dried Foods Content Here</h2>
-                </div>
-            </div>
-
-            <!-- 5. TAB CONTENT: BREAD & CAKE (Empty for demo) -->
-            <div class="tab-panel" id="bread-cake">
-                <div class="product-grid">
-                    <h2>Bread Content Here</h2>
-                </div>
-            </div>
-
-            <!-- 6. TAB CONTENT: FISH & MEAT (Empty for demo) -->
-            <div class="tab-panel" id="fish-meat">
-                <div class="product-grid">
-                    <h2>Fish & Meat Content Here</h2>
-                </div>
-            </div>
-
+            <?php
+                $panel_count++;
+            endforeach;
+            ?>
         </section>
     </section>
 
@@ -194,45 +231,57 @@ get_header();
             <!-- Categories Grid -->
             <div class="categories-grid">
 
-                <!-- Category Card 1 -->
-                <a href="#" class="category-card">
+                <!-- 1. STATIC CARD: BROWSE ALL -->
+                <?php
+                // Get total count of all published products
+                $total_products = wp_count_posts('product')->publish;
+                ?>
+                <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="category-card">
                     <div class="icon-blob">
-                        <!-- Replace with your actual icon image -->
+                        <!-- You can use a static icon for "Browse All" or a specific category image -->
                         <span class="placeholder-icon">🍎🥑</span>
                     </div>
                     <h3>Browse all</h3>
-                    <span class="item-count">(235 item)</span>
+                    <span class="item-count">(<?php echo $total_products; ?> item)</span>
                 </a>
 
-                <!-- Category Card 2 -->
-                <a href="#" class="category-card">
-                    <div class="icon-blob">
-                        <!-- Replace with your actual icon image -->
-                        <span class="placeholder-icon">🧴🍃</span>
-                    </div>
-                    <h3>Vegetables</h3>
-                    <span class="item-count">(78 item)</span>
-                </a>
+                <!-- 2. DYNAMIC CARDS: PRODUCT CATEGORIES -->
+                <?php
+                $categories = get_terms(array(
+                    'taxonomy'   => 'product_cat',
+                    'hide_empty' => false,
+                    'parent'     => 0,
+                    'number'     => 3, // Fetches 3 categories to fill the remaining 4 slots
+                    'orderby'    => 'count',
+                    'order'      => 'DESC'
+                ));
 
-                <!-- Category Card 3 -->
-                <a href="#" class="category-card">
-                    <div class="icon-blob">
-                        <!-- Replace with your actual icon image -->
-                        <span class="placeholder-icon">🥤</span>
-                    </div>
-                    <h3>Fruits</h3>
-                    <span class="item-count">(45 item)</span>
-                </a>
+                if (! empty($categories) && ! is_wp_error($categories)) :
+                    foreach ($categories as $category) :
+                        // Get Category Link
+                        $category_link = get_term_link($category);
 
-                <!-- Category Card 4 -->
-                <a href="#" class="category-card">
-                    <div class="icon-blob">
-                        <!-- Replace with your actual icon image -->
-                        <span class="placeholder-icon">🥪</span>
-                    </div>
-                    <h3>Meat</h3>
-                    <span class="item-count">(15 item)</span>
-                </a>
+                        // Get Category Thumbnail ID and Image URL
+                        $thumbnail_id = get_term_meta($category->term_id, 'thumbnail_id', true);
+                        $image_url    = wp_get_attachment_image_url($thumbnail_id, 'thumbnail');
+                ?>
+
+                        <a href="<?php echo esc_url($category_link); ?>" class="category-card">
+                            <div class="icon-blob">
+                                <?php if ($image_url) : ?>
+                                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($category->name); ?>">
+                                <?php else : ?>
+                                    <span class="placeholder-icon">📦</span>
+                                <?php endif; ?>
+                            </div>
+                            <h3><?php echo esc_html($category->name); ?></h3>
+                            <span class="item-count">(<?php echo $category->count; ?> item)</span>
+                        </a>
+
+                <?php
+                    endforeach;
+                endif;
+                ?>
 
             </div>
         </div>
@@ -241,8 +290,8 @@ get_header();
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="container cta-container">
-            <h2>Get A Free Service Or Make A Call</h2>
-            <button class="btn-make-call">📞 MAKE A CALL</button>
+            <h2><?php echo get_field('call_title'); ?></h2>
+            <button class="btn-make-call"><?php echo get_field('make_a_call_text'); ?></button>
         </div>
     </section>
 
@@ -256,7 +305,7 @@ get_header();
                 <span class="hot-sales">HOT SALES</span>
                 <h2>Big Sale</h2>
                 <p>Mango & juci</p>
-                <a href="#" class="btn-buy-now">Buy Now ⇾</a>
+                <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="btn-buy-now">Buy Now ⇾</a>
                 <!-- Placeholder for image overlay, replace with real image via CSS or IMG tag -->
                 <div class="banner-img-placeholder">🍊</div>
             </div>
@@ -266,7 +315,7 @@ get_header();
                 <span class="hot-sales">HOT SALES</span>
                 <h2>Save 20%</h2>
                 <p>Every Order</p>
-                <a href="#" class="btn-buy-now">Buy Now ⇾</a>
+                <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="btn-buy-now">Buy Now ⇾</a>
                 <div class="banner-img-placeholder">🍏</div>
             </div>
 
@@ -275,7 +324,7 @@ get_header();
                 <span class="hot-sales">HOT SALES</span>
                 <h2>Big Sale</h2>
                 <p>Mango & juci</p>
-                <a href="#" class="btn-buy-now">Buy Now ⇾</a>
+                <a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="btn-buy-now">Buy Now ⇾</a>
                 <div class="banner-img-placeholder">🍊</div>
             </div>
         </section>
@@ -283,125 +332,93 @@ get_header();
         <!-- 2. Product Lists Grid -->
         <section class="product-lists-section">
 
-            <!-- Column 1: Featured Products -->
-            <div class="product-list-column">
-                <h3 class="column-title">Featured Products</h3>
-                <div class="small-products-wrapper">
+    <?php
+    // Define your specific category slugs and their display titles
+    $sections = [
+        'featured-product'      => 'Featured Products',
+        'most-viewed-product'   => 'Most Viewed Products',
+        'bestseller-products'   => 'Bestseller Products'
+    ];
 
-                    <!-- Small Product Card 1 -->
-                    <div class="small-product-card">
-                        <div class="img-box"><img src="https://via.placeholder.com/60" alt="Tomato"></div>
-                        <div class="info-box">
-                            <div class="stars">★★★★☆</div>
-                            <h4>Red Hot Tomato</h4>
-                            <div class="price"><span class="new">$129.00</span> <span class="old">$140.00</span></div>
-                        </div>
-                    </div>
+    foreach ($sections as $slug => $title) :
+        // Setup Query to fetch products from these specific categories
+        $args = [
+            'post_type'      => 'product',
+            'posts_per_page' => 9, // Allows up to 3 slides (3 items per slide)
+            'tax_query'      => [
+                [
+                    'taxonomy' => 'product_cat',
+                    'field'    => 'slug',
+                    'terms'    => $slug,
+                ],
+            ],
+        ];
 
-                    <!-- Small Product Card 2 -->
-                    <div class="small-product-card">
-                        <div class="img-box"><img src="https://via.placeholder.com/60" alt="Papaya"></div>
-                        <div class="info-box">
-                            <div class="stars">★★★★☆</div>
-                            <h4>Vegetables Juices</h4>
-                            <div class="price"><span class="new">$145.00</span> <span class="old">$155.00</span></div>
-                        </div>
-                    </div>
+        $query = new WP_Query($args);
+        ?>
 
-                    <!-- Small Product Card 3 -->
-                    <div class="small-product-card">
-                        <div class="img-box"><img src="https://via.placeholder.com/60" alt="Berry"></div>
-                        <div class="info-box">
-                            <div class="stars">★★★★☆</div>
-                            <h4>Orange Fresh Juice</h4>
-                            <div class="price"><span class="new">$135.00</span> <span class="old">$145.00</span></div>
-                        </div>
-                    </div>
+        <div class="product-list-column">
+            <h3 class="column-title"><?php echo esc_html($title); ?></h3>
+            
+            <!-- Swiper Container -->
+            <div class="swiper small-product-slider">
+                <div class="swiper-wrapper">
+                    
+                    <?php 
+                    if ($query->have_posts()) : 
+                        $i = 0;
+                        while ($query->have_posts()) : $query->the_post();
+                            global $product;
+                            
+                            // Every 3 products, start a new Swiper Slide
+                            if ($i % 3 == 0) {
+                                echo '<div class="swiper-slide"><div class="small-products-wrapper">';
+                            }
+                            ?>
+                            
+                            <div class="small-product-card">
+                                <div class="img-box">
+                                    <a href="<?php the_permalink(); ?>">
+                                        <?php echo woocommerce_get_product_thumbnail('thumbnail'); ?>
+                                    </a>
+                                </div>
+                                <div class="info-box">
+                                    <div class="stars">
+                                        <?php echo wc_get_rating_html($product->get_average_rating()); ?>
+                                    </div>
+                                    <h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+                                    <div class="price">
+                                        <?php echo $product->get_price_html(); ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <?php
+                            // Close the slide after 3 products OR at the end of the total results
+                            if ($i % 3 == 2 || ($query->current_post + 1) == $query->post_count) {
+                                echo '</div></div>';
+                            }
+                            $i++;
+                        endwhile; 
+                        wp_reset_postdata();
+                    else:
+                        echo '<p>No products in this category.</p>';
+                    endif; 
+                    ?>
 
                 </div>
-                <!-- Pagination Dots -->
-                <div class="dots-pagination">
-                    <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
-                </div>
+                <!-- Swiper Pagination (Dots) -->
+                <div class="swiper-pagination"></div>
             </div>
+        </div>
 
-            <!-- Column 2: Most View Products -->
-            <div class="product-list-column">
-                <h3 class="column-title">Most View Products</h3>
-                <div class="small-products-wrapper">
-                    <div class="small-product-card">
-                        <div class="img-box"><img src="https://via.placeholder.com/60" alt="Tomato"></div>
-                        <div class="info-box">
-                            <div class="stars">★★★★☆</div>
-                            <h4>Red Hot Tomato</h4>
-                            <div class="price"><span class="new">$129.00</span> <span class="old">$140.00</span></div>
-                        </div>
-                    </div>
-                    <div class="small-product-card">
-                        <div class="img-box"><img src="https://via.placeholder.com/60" alt="Papaya"></div>
-                        <div class="info-box">
-                            <div class="stars">★★★★☆</div>
-                            <h4>Vegetables Juices</h4>
-                            <div class="price"><span class="new">$145.00</span> <span class="old">$155.00</span></div>
-                        </div>
-                    </div>
-                    <div class="small-product-card">
-                        <div class="img-box"><img src="https://via.placeholder.com/60" alt="Berry"></div>
-                        <div class="info-box">
-                            <div class="stars">★★★★☆</div>
-                            <h4>Orange Fresh Juice</h4>
-                            <div class="price"><span class="new">$135.00</span> <span class="old">$145.00</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="dots-pagination"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
-            </div>
+    <?php endforeach; ?>
 
-            <!-- Column 3: Bestseller Products -->
-            <div class="product-list-column">
-                <h3 class="column-title">Bestseller Products</h3>
-                <div class="small-products-wrapper">
-                    <div class="small-product-card">
-                        <div class="img-box"><img src="https://via.placeholder.com/60" alt="Tomato"></div>
-                        <div class="info-box">
-                            <div class="stars">★★★★☆</div>
-                            <h4>Red Hot Tomato</h4>
-                            <div class="price"><span class="new">$129.00</span> <span class="old">$140.00</span></div>
-                        </div>
-                    </div>
-                    <div class="small-product-card">
-                        <div class="img-box"><img src="https://via.placeholder.com/60" alt="Papaya"></div>
-                        <div class="info-box">
-                            <div class="stars">★★★★☆</div>
-                            <h4>Vegetables Juices</h4>
-                            <div class="price"><span class="new">$145.00</span> <span class="old">$155.00</span></div>
-                        </div>
-                    </div>
-                    <div class="small-product-card">
-                        <div class="img-box"><img src="https://via.placeholder.com/60" alt="Berry"></div>
-                        <div class="info-box">
-                            <div class="stars">★★★★☆</div>
-                            <h4>Orange Fresh Juice</h4>
-                            <div class="price"><span class="new">$135.00</span> <span class="old">$145.00</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="dots-pagination"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
-            </div>
-
-        </section>
+</section>
     </div>
 
     <!-- Brands Carousel Section -->
-    <section class="brands-section">
-        <div class="container brands-wrapper">
-            <img src="https://via.placeholder.com/150x80?text=Brand+1" alt="Brand Logo">
-            <img src="https://via.placeholder.com/150x80?text=Brand+2" alt="Brand Logo">
-            <img src="https://via.placeholder.com/150x80?text=Brand+3" alt="Brand Logo">
-            <img src="https://via.placeholder.com/150x80?text=Brand+4" alt="Brand Logo">
-            <img src="https://via.placeholder.com/150x80?text=Brand+5" alt="Brand Logo">
-        </div>
-    </section>
+    
 </main>
 
 <?php get_footer(); ?>
