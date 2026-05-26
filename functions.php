@@ -203,6 +203,23 @@ function agrofarm_register_customizer($wp_customize)
             'type'     => 'url',
         ) );
     }
+    // Map Contact section
+    $wp_customize->add_section('agrofarm_map_contact', array(
+        'title' => __('Map Contact', 'agrofarm'),
+        'priority' => 30,
+
+    ));
+    // customizer setting for map contact section
+    $wp_customize->add_setting('agrofarm_map_contact', array(
+        'default' => '',
+        'type' => 'theme_mod',
+    ));
+    $wp_customize->add_control('agrofarm_map_contact', array(
+        'label' => __('Map Contact', 'agrofarm'),
+        'section' => 'agrofarm_map_contact',
+        'settings' => 'agrofarm_map_contact',
+        'type' => 'url',
+    ));
 
     
 }
@@ -260,4 +277,44 @@ add_action('init', function() {
         pll_register_string('Agrofarm Hero', 'SHOP NOW', 'Hero Section');
     }
 });
+// Part A: Add the "Styles" dropdown to the ACF / WordPress Editor toolbar
+function agrofarm_add_styleselect_after_paragraph( $buttons ) {
+    // Find the position of 'formatselect' (the Paragraph/Heading dropdown)
+    $index = array_search( 'formatselect', $buttons );
 
+    if ( $index !== false ) {
+        // Insert 'styleselect' at the position right after 'formatselect'
+        array_splice( $buttons, $index + 1, 0, 'styleselect' );
+    } else {
+        // If 'formatselect' isn't found, put it at the beginning as a backup
+        array_unshift( $buttons, 'styleselect' );
+    }
+
+    return $buttons;
+}
+add_filter( 'mce_buttons', 'agrofarm_add_styleselect_after_paragraph' );
+
+// Part B: Define your custom formats (Green text, buttons, etc.)
+function agrofarm_custom_mce_formats( $init_array ) {
+    $style_formats = array(
+        array(
+            'title' => 'Agrofarm Green Text',
+            'inline' => 'span',
+            'classes' => 'text-green', // This is the CSS class name
+        ),
+        array(
+            'title' => 'Small Grey Info',
+            'inline' => 'span',
+            'classes' => 'text-grey-small',
+        )
+    );
+    $init_array['style_formats'] = json_encode( $style_formats );
+    return $init_array;
+}
+add_filter( 'tiny_mce_before_init', 'agrofarm_custom_mce_formats' );
+
+// Part C: Tell WordPress to use an "Editor Stylesheet" so the colors show up in the admin
+function agrofarm_add_editor_styles() {
+    add_editor_style( 'editor-style.css' );
+}
+add_action( 'admin_init', 'agrofarm_add_editor_styles' );

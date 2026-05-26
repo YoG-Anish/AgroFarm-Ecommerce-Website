@@ -1432,3 +1432,14 @@ body {
 .lang-dropdown li.current-lang {
     display: none;
 }
+
+/* This makes the text look green on the live website */
+.text-green { 
+    color: #79a206; 
+    font-weight: bold; 
+}
+
+.text-grey-small { 
+    color: #666; 
+    font-size: 12px; 
+}
