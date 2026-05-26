@@ -102,116 +102,116 @@ get_header();
         <p class="subtitle">A highly efficient slip-ring scanner for today's diagnostic requirements.</p>
 
         <section class="product-section">
-    <?php
-    // 1. Gather the ACF Field names
-    $tab_fields = ['category_tab1', 'category_tab2', 'category_tab3', 'category_tab4', 'category_tab5'];
-    $valid_tabs = [];
-
-    // 2. Build a dynamic array of translated categories based on ACF selections
-    foreach ($tab_fields as $field_name) {
-        $selected_id = get_field($field_name); // Assuming Return Format is "Term ID"
-        
-        if ($selected_id) {
-            // Get translated ID for current language
-            $lang_id = function_exists('pll_get_term') ? pll_get_term($selected_id) : $selected_id;
-            $term = get_term($lang_id);
-            
-            if ($term && !is_wp_error($term)) {
-                $valid_tabs[] = $term; // Store the full term object
-            }
-        }
-    }
-    ?>
-
-    <!-- 1. TAB NAVIGATION -->
-    <?php if (!empty($valid_tabs)) : ?>
-        <div class="tabs-header">
             <?php
-            foreach ($valid_tabs as $index => $term) :
-                $active_class = ($index == 0) ? 'active' : '';
+            // 1. Gather the ACF Field names
+            $tab_fields = ['category_tab1', 'category_tab2', 'category_tab3', 'category_tab4', 'category_tab5'];
+            $valid_tabs = [];
+
+            // 2. Build a dynamic array of translated categories based on ACF selections
+            foreach ($tab_fields as $field_name) {
+                $selected_id = get_field($field_name); // Assuming Return Format is "Term ID"
+
+                if ($selected_id) {
+                    // Get translated ID for current language
+                    $lang_id = function_exists('pll_get_term') ? pll_get_term($selected_id) : $selected_id;
+                    $term = get_term($lang_id);
+
+                    if ($term && !is_wp_error($term)) {
+                        $valid_tabs[] = $term; // Store the full term object
+                    }
+                }
+            }
             ?>
-                <button class="tab-btn <?php echo $active_class; ?>" data-target="tab-<?php echo $term->slug; ?>">
-                    <?php echo esc_html($term->name); ?>
-                </button>
-            <?php endforeach; ?>
-        </div>
 
-        <!-- 2. TAB CONTENT PANELS -->
-        <?php foreach ($valid_tabs as $index => $term) :
-            $active_panel = ($index == 0) ? 'active' : '';
-        ?>
-            <div class="tab-panel <?php echo $active_panel; ?>" id="tab-<?php echo $term->slug; ?>">
-                <div class="product-grid">
+            <!-- 1. TAB NAVIGATION -->
+            <?php if (!empty($valid_tabs)) : ?>
+                <div class="tabs-header">
                     <?php
-                    $args = array(
-                        'post_type'      => 'product',
-                        'posts_per_page' => 4,
-                        'tax_query'      => array(
-                            array(
-                                'taxonomy' => 'product_cat',
-                                'field'    => 'term_id',
-                                'terms'    => $term->term_id,
-                            ),
-                        ),
-                        'orderby'        => 'date',
-                        'order'          => 'DESC'
-                    );
-
-                    $loop = new WP_Query($args);
-
-                    if ($loop->have_posts()) :
-                        while ($loop->have_posts()) : $loop->the_post();
-                            global $product;
+                    foreach ($valid_tabs as $index => $term) :
+                        $active_class = ($index == 0) ? 'active' : '';
                     ?>
-                            <div class="product-card">
-                                <div class="product-img-wrapper">
-                                    <?php if ($product->is_on_sale()) : ?>
-                                        <span class="badge">-
-                                            <?php
-                                            if ($product->is_type('simple')) {
-                                                $regular_price = $product->get_regular_price();
-                                                $sale_price = $product->get_sale_price();
-                                                if($regular_price > 0) {
-                                                    echo round((($regular_price - $sale_price) / $regular_price) * 100) . '%';
-                                                }
-                                            } else {
-                                                echo 'Sale';
-                                            }
-                                            ?></span>
-                                    <?php elseif (date('Y-m-d', strtotime($product->get_date_created())) > date('Y-m-d', strtotime('-7 days'))) : ?>
-                                        <span class="badge">NEW</span>
-                                    <?php endif; ?>
-
-                                    <a href="<?php the_permalink(); ?>">
-                                        <?php echo woocommerce_get_product_thumbnail('medium'); ?>
-                                    </a>
-                                </div>
-
-                                <div class="product-info">
-                                    <div class="stars">
-                                        <?php echo wc_get_rating_html($product->get_average_rating()); ?>
-                                        <span>(<?php echo $product->get_review_count(); ?>)</span>
-                                    </div>
-                                    <h3 class="product-title">
-                                        <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                                    </h3>
-                                    <div class="price-wrap">
-                                        <?php echo $product->get_price_html(); ?>
-                                    </div>
-                                </div>
-                            </div>
-                    <?php
-                        endwhile;
-                    else :
-                        echo '<p>No products found in ' . esc_html($term->name) . '</p>';
-                    endif;
-                    wp_reset_postdata();
-                    ?>
+                        <button class="tab-btn <?php echo $active_class; ?>" data-target="tab-<?php echo $term->slug; ?>">
+                            <?php echo esc_html($term->name); ?>
+                        </button>
+                    <?php endforeach; ?>
                 </div>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</section>
+
+                <!-- 2. TAB CONTENT PANELS -->
+                <?php foreach ($valid_tabs as $index => $term) :
+                    $active_panel = ($index == 0) ? 'active' : '';
+                ?>
+                    <div class="tab-panel <?php echo $active_panel; ?>" id="tab-<?php echo $term->slug; ?>">
+                        <div class="product-grid">
+                            <?php
+                            $args = array(
+                                'post_type'      => 'product',
+                                'posts_per_page' => 4,
+                                'tax_query'      => array(
+                                    array(
+                                        'taxonomy' => 'product_cat',
+                                        'field'    => 'term_id',
+                                        'terms'    => $term->term_id,
+                                    ),
+                                ),
+                                'orderby'        => 'date',
+                                'order'          => 'DESC'
+                            );
+
+                            $loop = new WP_Query($args);
+
+                            if ($loop->have_posts()) :
+                                while ($loop->have_posts()) : $loop->the_post();
+                                    global $product;
+                            ?>
+                                    <div class="product-card">
+                                        <div class="product-img-wrapper">
+                                            <?php if ($product->is_on_sale()) : ?>
+                                                <span class="badge">-
+                                                    <?php
+                                                    if ($product->is_type('simple')) {
+                                                        $regular_price = $product->get_regular_price();
+                                                        $sale_price = $product->get_sale_price();
+                                                        if ($regular_price > 0) {
+                                                            echo round((($regular_price - $sale_price) / $regular_price) * 100) . '%';
+                                                        }
+                                                    } else {
+                                                        echo 'Sale';
+                                                    }
+                                                    ?></span>
+                                            <?php elseif (date('Y-m-d', strtotime($product->get_date_created())) > date('Y-m-d', strtotime('-7 days'))) : ?>
+                                                <span class="badge">NEW</span>
+                                            <?php endif; ?>
+
+                                            <a href="<?php the_permalink(); ?>">
+                                                <?php echo woocommerce_get_product_thumbnail('medium'); ?>
+                                            </a>
+                                        </div>
+
+                                        <div class="product-info">
+                                            <div class="stars">
+                                                <?php echo wc_get_rating_html($product->get_average_rating()); ?>
+                                                <span>(<?php echo $product->get_review_count(); ?>)</span>
+                                            </div>
+                                            <h3 class="product-title">
+                                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                            </h3>
+                                            <div class="price-wrap">
+                                                <?php echo $product->get_price_html(); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <?php
+                                endwhile;
+                            else :
+                                echo '<p>No products found in ' . esc_html($term->name) . '</p>';
+                            endif;
+                            wp_reset_postdata();
+                            ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </section>
     </section>
 
     <section class="top-categories-section">

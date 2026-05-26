@@ -260,3 +260,4 @@ add_action('init', function() {
         pll_register_string('Agrofarm Hero', 'SHOP NOW', 'Hero Section');
     }
 });
+

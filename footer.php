@@ -1,7 +1,7 @@
 <section class="brands-section">
     <div class="container brands-wrapper">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner1.png" alt="Brand Logo">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner1.png" alt="Brand Logo">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner2.png" alt="Brand Logo">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner3.png" alt="Brand Logo">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner1.png" alt="Brand Logo">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/partner2.png" alt="Brand Logo">
@@ -16,18 +16,17 @@
 
             <!-- Column 1: Info -->
             <div class="brand-widget">
-                <a href="#" class="footer-logo">
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="logo-wrapper">
                     <!-- SVG Broccoli Icon -->
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22v-5" fill="#6da73d" />
-                        <path d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" fill="#6da73d" />
-                        <path d="M12 13V9" fill="#6da73d" />
-                        <path d="M12 9a4 4 0 0 0-4-4 4 4 0 0 0-4 4v1" fill="#6da73d" />
-                        <path d="M12 9a4 4 0 0 1 4-4 4 4 0 0 1 4 4v1" fill="#6da73d" />
-                        <path d="M8 9a4 4 0 0 0-4-4" fill="#6da73d" />
-                        <path d="M16 9a4 4 0 0 1 4-4" fill="#6da73d" />
-                    </svg>
-                    <span>Broccoli</span>
+                    <?php
+                    $footer_logo_id = get_theme_mod('agrofarm_header_logo');
+                    if ($footer_logo_id) :
+                        $footer_logo_url = wp_get_attachment_url($footer_logo_id);
+                        $footer_logo_alt = get_post_meta($footer_logo_id, '_wp_attachment_image_alt', true);
+                    ?>
+                        <img src="<?php echo esc_url($footer_logo_url); ?>" alt="<?php echo esc_attr($footer_logo_alt); ?>">
+                    <?php endif; ?>
+                    <span><?php echo get_theme_mod('agrofarm_header_title'); ?></span>
                 </a>
                 <p><?php echo get_theme_mod('agrofarm_footer_description'); ?></p>
                 <ul class="contact-list">
