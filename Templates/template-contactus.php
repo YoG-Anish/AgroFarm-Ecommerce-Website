@@ -4,7 +4,15 @@
 */
 get_header();
 ?>
-
+<section class="contact-form-section" style="padding: 80px 0;">
+    <div class="container">
+        <div class="section-title text-center" style="text-align:center; margin-bottom:50px;">
+            <h2 style="font-weight: 800; font-size: 36px; color: #1a2623;">Send us a Message</h2>
+        </div>
+        
+        <?php echo do_shortcode('[contact-form-7 id="9695b08" title="Contact Page"]'); ?>
+    </div>
+</section>
 <section class="location-map-section">
     <div class="container">
         <!-- Section Heading -->

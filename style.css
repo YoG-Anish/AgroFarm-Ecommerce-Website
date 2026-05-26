@@ -1443,3 +1443,83 @@ body {
     color: #666; 
     font-size: 12px; 
 }
+
+/* --- Agrofarm Contact Form Styling --- */
+.agrofarm-contact-form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Two columns for Name and Email */
+.agrofarm-contact-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Responsive: Stack columns on mobile */
+@media (max-width: 600px) {
+    .agrofarm-contact-form .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.agrofarm-contact-form .form-group {
+    margin-bottom: 20px;
+}
+
+/* Style Inputs and Textarea */
+.agrofarm-contact-form input[type="text"],
+.agrofarm-contact-form input[type="email"],
+.agrofarm-contact-form textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #e1e1e1;
+    background-color: #fcfcfc;
+    font-size: 14px;
+    color: #333;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+/* Focus effect - matches your brand green */
+.agrofarm-contact-form input:focus,
+.agrofarm-contact-form textarea:focus {
+    border-color: #79a206;
+    background-color: #fff;
+}
+
+/* Submit Button Styling */
+.agrofarm-contact-form input[type="submit"] {
+    background-color: #79a206;
+    color: #fff;
+    border: none;
+    padding: 15px 40px;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.agrofarm-contact-form input[type="submit"]:hover {
+    background-color: #6da73d;
+}
+
+/* Validation Error Styling */
+.wpcf7-not-valid-tip {
+    color: #d81b1b;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.wpcf7-response-output {
+    margin: 20px 0 0 0 !important;
+    padding: 15px !important;
+    border-radius: 4px !important;
+    font-size: 14px;
+}
