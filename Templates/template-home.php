@@ -11,6 +11,7 @@ get_header();
         <aside class="sidebar">
             <div class="sidebar-title">☰ CATEGORIES</div>
             <ul class="category-list">
+
                 <?php
                 // 1. Fetch Categories (Polylang automatically filters these by current language)
                 $categories = get_terms(array(
@@ -217,6 +218,7 @@ get_header();
     <section class="top-categories-section">
         <div class="container">
 
+
             <!-- Section Title -->
             <div class="section-heading">
                 <h2>Top Categories</h2>
@@ -324,8 +326,10 @@ get_header();
             </div>
         </section>
 
+        <h1> <?php the_content(); ?> </h1>
         <!-- 2. Product Lists Grid -->
         <section class="product-lists-section">
+
 
             <?php
             // 1. Define your 3 field names in an array

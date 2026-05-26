@@ -50,3 +50,61 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    new Swiper('.testimonial-slider', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        autoplay: { delay: 1500 },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+
+    // 1. Initialize Product Column Sliders (The ones in 3 columns)
+    const productSliders = document.querySelectorAll('.small-product-slider');
+    productSliders.forEach(slider => {
+        new Swiper(slider, {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: false,
+            autoplay: false,
+            
+            // SWIPE SETTINGS
+            grabCursor: true,        // Shows the 'hand' icon so users know they can drag
+            simulateTouch: true,    // Allows mouse dragging to act like a swipe
+            allowTouchMove: true,   // Ensures swiping is enabled
+            threshold: 5,           // The distance (in px) a user must move the mouse to trigger a swipe
+            
+            pagination: {
+                el: slider.querySelector('.swiper-pagination'),
+                clickable: true,
+            },
+        });
+    });
+
+    // 2. Initialize Testimonial Slider
+    const testimonialSlider = document.querySelector('.testimonial-slider');
+    if (testimonialSlider) {
+        new Swiper(testimonialSlider, {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: { delay: 5000 },
+
+            // SWIPE SETTINGS
+            grabCursor: true,
+            simulateTouch: true,
+            allowTouchMove: true,
+
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    }
+});

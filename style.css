@@ -1523,3 +1523,77 @@ body {
     border-radius: 4px !important;
     font-size: 14px;
 }
+
+/* --- elementor custom widget Testimonial Slider --- */
+.testimonial-slider { padding-bottom: 50px; text-align: center; }
+
+.testimonial-card {
+    background: #fff;
+    padding: 40px;
+    border: 1px solid #eee;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.client-thumb img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    object-fit: cover;
+    border: 3px solid #79a206;
+}
+
+.testimonial-card .feedback { font-style: italic; font-size: 18px; color: #555; margin-bottom: 20px; }
+.testimonial-card .name { font-weight: 800; color: #1a2623; margin-bottom: 5px; }
+.testimonial-card .designation { color: #79a206; font-size: 13px; font-weight: 700; }
+
+
+.product-lists-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.column-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.column-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 50px;
+    height: 2px;
+    background: #79a206;
+}
+
+.small-product-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid #f1f1f1;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #fff;
+}
+
+.small-product-card .img-box img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+}
+
+.small-product-card h4 { font-size: 15px; margin-bottom: 5px; }
+.small-product-card .price { color: #79a206; font-weight: 700; }
+
+.swiper-slide {
+    user-select: none; /* Prevents text highlighting while dragging */
+    -webkit-user-drag: none; /* Prevents images from being 'dragged' out of the browser */
+}

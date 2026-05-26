@@ -75,10 +75,26 @@ BROCCOLI HEADER START
                         </div>
 
                         <div class="social-icons">
-                            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#"><i class="fa-solid fa-globe"></i></a>
+                            <?php
+                            // Map of Setting ID => FontAwesome Icon Class
+                            $social_icons = array(
+                                'facebook'  => 'fa-brands fa-facebook-f',
+                                'twitter'   => 'fa-brands fa-twitter',
+                                'instagram' => 'fa-brands fa-instagram',
+                                'website'   => 'fa-solid fa-globe'
+                            );
+
+                            foreach ($social_icons as $id => $icon_class) :
+                                // We use the same ID used in the Customizer
+                                $url = get_theme_mod("header_social_$id");
+
+                                // Only show if the URL is not empty
+                                if (! empty($url)) : ?>
+                                    <a href="<?php echo esc_url($url); ?>" target="_blank">
+                                        <i class="<?php echo esc_attr($icon_class); ?>"></i>
+                                    </a>
+                            <?php endif;
+                            endforeach; ?>
                         </div>
                     </div>
                 </div>

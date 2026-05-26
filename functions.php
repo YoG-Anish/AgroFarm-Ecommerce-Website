@@ -18,7 +18,6 @@ function agrofarm_setup()
 {
     add_theme_support('post-thumbnails');
     add_theme_support('title-tag');
-
 }
 add_action('after_setup_theme', 'agrofarm_setup');
 
@@ -107,7 +106,7 @@ function agrofarm_register_customizer($wp_customize)
         'title' => __('Footer', 'agrofarm'),
         'priority' => 30,
     ));
-    
+
     // footer description
     $wp_customize->add_setting('agrofarm_footer_description', array(
         'default' => '',
@@ -156,7 +155,7 @@ function agrofarm_register_customizer($wp_customize)
     $wp_customize->add_setting('agrofarm_footer_menu_1', array(
         'default' => '',
         'type' => 'theme_mod',
-    ));    
+    ));
     $wp_customize->add_control('agrofarm_footer_menu_1', array(
         'label' => __('Footer Menu 1', 'agrofarm'),
         'section' => 'agrofarm_footer',
@@ -167,7 +166,7 @@ function agrofarm_register_customizer($wp_customize)
     $wp_customize->add_setting('agrofarm_footer_menu_2', array(
         'default' => '',
         'type' => 'theme_mod',
-    ));    
+    ));
     $wp_customize->add_control('agrofarm_footer_menu_2', array(
         'label' => __('Footer Menu 2', 'agrofarm'),
         'section' => 'agrofarm_footer',
@@ -178,7 +177,7 @@ function agrofarm_register_customizer($wp_customize)
     $wp_customize->add_setting('agrofarm_footer_menu_3', array(
         'default' => '',
         'type' => 'theme_mod',
-    ));    
+    ));
     $wp_customize->add_control('agrofarm_footer_menu_3', array(
         'label' => __('Footer Menu 3', 'agrofarm'),
         'section' => 'agrofarm_footer',
@@ -188,20 +187,20 @@ function agrofarm_register_customizer($wp_customize)
     // List of social platforms to create settings for
     $socials = array('facebook', 'twitter', 'linkedin', 'youtube');
 
-    foreach($socials as $social) {
+    foreach ($socials as $social) {
         // Add Setting
-        $wp_customize->add_setting( 'agrofarm_' . $social . '_link', array(
+        $wp_customize->add_setting('agrofarm_' . $social . '_link', array(
             'default'   => '',
             'type'      => 'theme_mod',
             'sanitize_callback' => 'esc_url_raw', // Ensures it's a valid URL
-        ) );
+        ));
 
         // Add Control
-        $wp_customize->add_control( 'agrofarm_' . $social . '_link', array(
+        $wp_customize->add_control('agrofarm_' . $social . '_link', array(
             'label'    => ucfirst($social) . ' URL',
             'section'  => 'agrofarm_footer',
             'type'     => 'url',
-        ) );
+        ));
     }
     // Map Contact section
     $wp_customize->add_section('agrofarm_map_contact', array(
@@ -221,55 +220,86 @@ function agrofarm_register_customizer($wp_customize)
         'type' => 'url',
     ));
 
-    
+
+    // 1. Add Section
+    $wp_customize->add_section('agrofarm_header_social_section', array(
+        'title'      => __('Header Social Links', 'agrofarm'),
+        'priority'   => 30,
+    ));
+
+    // 2. Define all platforms
+    $social_platforms = array(
+        'facebook'  => 'Facebook',
+        'twitter'   => 'Twitter',
+        'instagram' => 'Instagram',
+        'website'   => 'Website'
+    );
+
+    // 3. Loop through to create settings and controls
+    foreach ($social_platforms as $id => $label) {
+
+        $wp_customize->add_setting("header_social_$id", array(
+            'default'           => '',
+            'type'              => 'theme_mod',
+            'sanitize_callback' => 'esc_url_raw',
+        ));
+
+        $wp_customize->add_control("header_social_$id", array(
+            'label'    => "$label URL",
+            'section'  => 'agrofarm_header_social_section',
+            'type'     => 'url',
+        ));
+    }
 }
 add_action('customize_register', 'agrofarm_register_customizer');
 
 
-function mytheme_add_woocommerce_support() {
-    add_theme_support( 'woocommerce' );
-    
+function mytheme_add_woocommerce_support()
+{
+    add_theme_support('woocommerce');
+
     // Optional but recommended: Add support for WooCommerce gallery features
-    add_theme_support( 'wc-product-gallery-zoom' );
-    add_theme_support( 'wc-product-gallery-lightbox' );
-    add_theme_support( 'wc-product-gallery-slider' );
+    add_theme_support('wc-product-gallery-zoom');
+    add_theme_support('wc-product-gallery-lightbox');
+    add_theme_support('wc-product-gallery-slider');
 }
-add_action( 'after_setup_theme', 'mytheme_add_woocommerce_support' );
+add_action('after_setup_theme', 'mytheme_add_woocommerce_support');
 
 /**
  * Update custom cart icon count and price with AJAX
  */
-add_filter( 'woocommerce_add_to_cart_fragments', 'my_custom_wc_cart_fragments' );
-function my_custom_wc_cart_fragments( $fragments ) {
-    
+add_filter('woocommerce_add_to_cart_fragments', 'my_custom_wc_cart_fragments');
+function my_custom_wc_cart_fragments($fragments)
+{
+
     // Refresh the cart count badge
     ob_start();
-    ?>
+?>
     <span class="cart-badge custom-cart-count">
         <?php echo WC()->cart->get_cart_contents_count(); ?>
     </span>
     <?php
     $fragments['span.custom-cart-count'] = ob_get_clean();
-    
+
     // Refresh the cart total price
     ob_start();
     ?>
     <span class="cart-price custom-cart-total">
         <?php echo WC()->cart->get_cart_subtotal(); ?>
     </span>
-    <?php
+<?php
     $fragments['span.custom-cart-total'] = ob_get_clean();
-    
+
     return $fragments;
 }
 
 // Remove WooCommerce sidebar
-remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
+remove_action('woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 
 
 // Register strings for Polylang translation
-add_action('init', function() {
-    if ( function_exists('pll_register_string') ) {
+add_action('init', function () {
+    if (function_exists('pll_register_string')) {
         // Syntax: pll_register_string('Context', 'String to translate', 'Group');
         pll_register_string('Agrofarm Header', 'Liwali, Bhaktapur', 'Header');
         pll_register_string('Agrofarm Header', 'PHONE', 'Header');
@@ -278,24 +308,26 @@ add_action('init', function() {
     }
 });
 // Part A: Add the "Styles" dropdown to the ACF / WordPress Editor toolbar
-function agrofarm_add_styleselect_after_paragraph( $buttons ) {
+function agrofarm_add_styleselect_after_paragraph($buttons)
+{
     // Find the position of 'formatselect' (the Paragraph/Heading dropdown)
-    $index = array_search( 'formatselect', $buttons );
+    $index = array_search('formatselect', $buttons);
 
-    if ( $index !== false ) {
+    if ($index !== false) {
         // Insert 'styleselect' at the position right after 'formatselect'
-        array_splice( $buttons, $index + 1, 0, 'styleselect' );
+        array_splice($buttons, $index + 1, 0, 'styleselect');
     } else {
         // If 'formatselect' isn't found, put it at the beginning as a backup
-        array_unshift( $buttons, 'styleselect' );
+        array_unshift($buttons, 'styleselect');
     }
 
     return $buttons;
 }
-add_filter( 'mce_buttons', 'agrofarm_add_styleselect_after_paragraph' );
+add_filter('mce_buttons', 'agrofarm_add_styleselect_after_paragraph');
 
 // Part B: Define your custom formats (Green text, buttons, etc.)
-function agrofarm_custom_mce_formats( $init_array ) {
+function agrofarm_custom_mce_formats($init_array)
+{
     $style_formats = array(
         array(
             'title' => 'Agrofarm Green Text',
@@ -308,13 +340,34 @@ function agrofarm_custom_mce_formats( $init_array ) {
             'classes' => 'text-grey-small',
         )
     );
-    $init_array['style_formats'] = json_encode( $style_formats );
+    $init_array['style_formats'] = json_encode($style_formats);
     return $init_array;
 }
-add_filter( 'tiny_mce_before_init', 'agrofarm_custom_mce_formats' );
+add_filter('tiny_mce_before_init', 'agrofarm_custom_mce_formats');
 
 // Part C: Tell WordPress to use an "Editor Stylesheet" so the colors show up in the admin
-function agrofarm_add_editor_styles() {
-    add_editor_style( 'editor-style.css' );
+function agrofarm_add_editor_styles()
+{
+    add_editor_style('editor-style.css');
 }
-add_action( 'admin_init', 'agrofarm_add_editor_styles' );
+add_action('admin_init', 'agrofarm_add_editor_styles');
+
+
+// Custom widgets elementor
+function register_agrofarm_widgets($widgets_manager) {
+    
+    // Testimonial Widget
+    $testimonial_path = __DIR__ . '/inc/testimonial-widget.php';
+    if ( file_exists( $testimonial_path ) ) {
+        require_once( $testimonial_path );
+        $widgets_manager->register( new \Agrofarm_Testimonial_Widget() );
+    }
+
+    // Product Columns Widget
+    $product_col_path = __DIR__ . '/inc/product-columns-widget.php';
+    if ( file_exists( $product_col_path ) ) {
+        require_once( $product_col_path );
+        $widgets_manager->register( new \Agrofarm_Product_Columns_Widget() );
+    }
+}
+add_action('elementor/widgets/register', 'register_agrofarm_widgets');

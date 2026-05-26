@@ -4,6 +4,7 @@
 */
 get_header();
 ?>
+<h1> <?php the_content(); ?> </h1>
 <section class="contact-form-section" style="padding: 80px 0;">
     <div class="container">
         <div class="section-title text-center" style="text-align:center; margin-bottom:50px;">
